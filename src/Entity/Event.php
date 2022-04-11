@@ -34,6 +34,7 @@ class Event
     private $description;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'events')]
+    #[ORM\JoinColumn(nullable: true)]
     private $users;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'newEvents')]
