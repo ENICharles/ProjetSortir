@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -40,6 +42,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private $isActive;
+
+    #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'users')]
+    private $events;
+
+    #[ORM\OneToMany(mappedBy: 'organisator', targetEntity: Event::class)]
+    private $newEvents;
+
+    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $campus;
+
+    public function __construct()
+    {
+        $this->events = new ArrayCollection();
+        $this->newEvents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -167,6 +185,72 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(Event $event): self
+    {
+        $this->events->removeElement($event);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Event>
+     */
+    public function getNewEvents(): Collection
+    {
+        return $this->newEvents;
+    }
+
+    public function addNewEvent(Event $newEvent): self
+    {
+        if (!$this->newEvents->contains($newEvent)) {
+            $this->newEvents[] = $newEvent;
+            $newEvent->setOrganisator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNewEvent(Event $newEvent): self
+    {
+        if ($this->newEvents->removeElement($newEvent)) {
+            // set the owning side to null (unless already changed)
+            if ($newEvent->getOrganisator() === $this) {
+                $newEvent->setOrganisator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): self
+    {
+        $this->campus = $campus;
 
         return $this;
     }
