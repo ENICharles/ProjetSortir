@@ -15,4 +15,93 @@
 {% endblock %}
 {% block body %}
 
+    <style>
+        table,
+        td {
+            border: 1px solid #333;
+        }
+
+        thead,
+        tfoot {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+
+    <p>ici la page d'accueil</p>
+
+    <form action="{{ path('main_search') }}" method="GET">
+        <label for="campus">Campus</label>
+        <select id="campus" name="campus">
+            {% for campus in  lstCampus %}
+                <option value="{{ campus.name }}">{{ campus.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="search">Le nom de la sortie contient :</label>
+        <input type="text" id="search" name="search"><br>
+
+        <label for="dateStar">Entre</label>
+        <input type="datetime-local" id="dateStart" name="dateStart"><br>
+
+        <label for="dateEnd">Et :</label>
+        <input type="datetime-local" id="dateEnd" name="dateEnd"><br>
+
+        <label for="eventManage">Sorties dont je suis l'organisateur/trice</label>
+        <input type="checkbox" id="eventManage" name="eventManage" checked><br>
+
+        <label for="eventIns">Sorties auquellezs je suis inscrit/e</label>
+        <input type="checkbox" id="eventIns" name="eventIns" checked><br>
+
+        <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>
+        <input type="checkbox" id="eventUnIns" name="eventUnIns" checked><br>
+
+        <label for="eventOld">Sorties passée</label>
+        <input type="checkbox" id="eventOld" name="eventOld" checked><br>
+
+        <input type="submit">
+    </form>
+
+    <table>
+        <thead>
+        <tr><th colspan="8">Liste des events</th><tr>
+         <tr>
+            <td>Nom</td>
+            <td>Date de début</td>
+            <td>Date de fin</td>
+            <td>Date limite d'inscription</td>
+            <td>Nombre max d'inscription</td>
+            <td>Etat</td>
+            <td>Organisateur</td>
+            <td>Actions</td>
+         </tr>
+
+        </thead>
+        <tbody>
+        {% for event in lstEvent %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>{{event.dateStart | date('m/d/y h:i')}}</td>
+                <td>{{(event.dateStart) | date_modify('+' ~ event.duration ~' minutes')| date('m/d/y h:i')}}</td>
+                <td>{{event.inscriptionDateLimit | date('m/d/y h:i')}}</td>
+                <td>{{event.nbMaxInscription}}</td>
+                <td>{{event.state.label}}</td>
+                <td>{{event.organisator.name}}</td>
+                <td> <a href="">Afficher</a>
+
+                    {% if app.user %}
+                        <a href="">- Se désister</a>
+                    {% else %}
+                        <a href="{{ path('main_inscription' , {'id': event.id }) }}">- S'inscrire</a>
+                    {% endif %}
+
+                </td>
+            </tr>
+        {% else %}
+            pas de sorties
+        {% endfor %}
+        </tbody>
+    </table>
+
+
 {% endblock %}
