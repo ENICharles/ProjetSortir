@@ -5,15 +5,14 @@
 {% endblock %}
 
 {% block header %}
-    <ul>
-        <li>
-            <a href="{{ path('app_login') }}">Se connecter</a>
-        </li>
-        <li>
-            <a href="{{ path('app_register') }}">S'enregistrer</a>
-        </li>
-    </ul>
+    {% if app.user %}
+        <nav>
+            <a href="{{ path('main_index') }}">Accueil</a>
+            <a href="{{ path('user_profil') }}">Mon Profil</a>
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        </nav>
+    {% endif %}
 {% endblock %}
 {% block body %}
-    <p>ici la page d'accueil</p>
+
 {% endblock %}

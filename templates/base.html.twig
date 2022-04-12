@@ -11,6 +11,14 @@
     </head>
     <body>
         {% block header %}
+            {% if app.user %}
+                <nav>
+                    <a href="{{ path('main_index') }}">Accueil</a>
+                    <a href="{{ path('user_profil') }}">Mon Profil</a>
+                    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+                </nav>
+            {% endif %}
+
         {% endblock %}
 
         {% block body %}

@@ -11,13 +11,13 @@ class MainController extends AbstractController
     #[Route('/', name: '_index')]
     public function index(): Response
     {
-//        if($this->getUser())
-//        {
-//            return $this->render('main/index.html.twig', ['controller_name' => 'MainController',]);
-//        }
-//        else
-//        {
+        if($this->getUser())
+        {
+            return $this->render('main/index.html.twig', ['controller_name' => 'MainController',]);
+        }
+        else
+       {
             return $this->redirectToRoute('app_login');
-//        }
+        }
     }
 }
