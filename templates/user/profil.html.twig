@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h1>Mon profil</h1>
+
+    {{ form_start(userForm) }}
+    {{ form_widget(userForm) }}
+    <button>Enregistrer</button>
+    {{ form_end(userForm) }}
+    <a href="{{ path('main_index') }}"><button>Annuler</button></a>
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

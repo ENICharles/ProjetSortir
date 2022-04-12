@@ -23,10 +23,16 @@ class MainController extends AbstractController
     {
         if($this->getUser())
         {
+
+            return $this->render('main/index.html.twig', ['controller_name' => 'MainController',]);
+        }
+        else
+       {
+            return $this->redirectToRoute('app_login');
+        }
+
             $lstCampus = $cr->findAll();
             $lstEvent  = $er->findAll();
-
-            //dd($lstEvent);
 
             return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
         }
@@ -76,5 +82,6 @@ class MainController extends AbstractController
         }
 
         return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
+
     }
 }
