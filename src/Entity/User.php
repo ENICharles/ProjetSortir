@@ -209,6 +209,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @brief Ajout l'évènement si il n'est pas en dans la liste sinon le supprime
+     * @param Event $event
+     * @return $this     *
+     */
+    public function addPopEvent(Event $event): self
+    {
+        if (!$this->events->contains($event))
+        {
+            $this->events[] = $event;
+        }
+        else
+        {
+            $this->removeEvent($event);
+        }
+
+        return $this;
+    }
+
     public function removeEvent(Event $event): self
     {
         $this->events->removeElement($event);
