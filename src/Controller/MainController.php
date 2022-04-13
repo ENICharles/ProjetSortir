@@ -93,8 +93,6 @@ class MainController extends AbstractController
             return $ret;
         }, ARRAY_FILTER_USE_BOTH);
 
-        dd($newArray);
-
         return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
     }
 }

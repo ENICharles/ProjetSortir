@@ -31,14 +31,13 @@ class EventController extends AbstractController
 
     #[Route('/details/{id}', name: '_details',requirements: ["id" => "\d+"])]
     public function detail(
-        EventRepository $event,
+        EventRepository $eventRepository,
         Event $event
     ): Response
     {
         return $this->render('event/detail.html.twig',
             compact('event')
         );
-
     }
 
     #[Route('/update/{id}', name: '_update',requirements: ["id" => "\d+"])]
@@ -79,6 +78,5 @@ class EventController extends AbstractController
 //        $entityManager->flush();
 //        return $this->redirectToRoute('main_index');
 //    }
-}
 }
 
