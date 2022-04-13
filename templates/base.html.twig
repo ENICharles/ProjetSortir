@@ -1,27 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>
             {% block title %}
                 Sortir.com
             {% endblock %}</title>
-{#        <link rel="stylesheet" href="{{ asset('css/normalizer.css') }}">#}
-{#        <link rel="stylesheet" href="{{ asset('css/style.css') }}">#}
+        <link rel="stylesheet" href="{{ asset('css/normalizer.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     </head>
     <body>
-        {% block header %}
-            {% if app.user %}
-                <nav>
-                    <a href="{{ path('main_index') }}">Accueil</a>
-                    <a href="{{ path('user_profil') }}">Mon Profil</a>
-                    <a href="{{ path('app_logout') }}">Se déconnecter</a>
-                </nav>
-            {% endif %}
-
-        {% endblock %}
-
-        {% block body %}
-        {% endblock %}
+        <div class="container">
+            <header class="header">
+                <div class="header__container">
+                    <div class="header__logo">
+                        <a class="header__link" href="{{ path('main_index') }}">
+                            <img class="header__img" src="#" alt="Logo">
+                            <h1 class="header__sigle">Sortir.com</h1>
+                        </a>
+                    </div>
+                    <nav class="nav">
+                        <ul class="nav__list">
+                            <li class="nav__item">
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                <a class="nav__link" href="{{ path('app_login') }}">Se connecter</a>
+                            </li>
+                            <li class="nav__item">
+                                <i class="fa-solid fa-id-badge"></i>
+                                <a href="{{ path('app_register') }}">S'enregistrer</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+            <main class="main">
+                {% block body %}
+                {% endblock %}
+            </main>
+            <footer class="footer">
+                {% block footer %}
+                {% endblock %}
+            </footer>
+        </div>
+        <script src="https://kit.fontawesome.com/2795f9a1d5.js" crossorigin="anonymous"></script>
     </body>
 </html>

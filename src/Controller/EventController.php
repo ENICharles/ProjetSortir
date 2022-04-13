@@ -14,20 +14,31 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/event', name: 'event')]
 class EventController extends AbstractController
 {
-    #[Route('/index', name: '_index')]
+    #[Route('/', name: '_index')]
     public function index(): Response
     {
         return $this->render('event/index.html.twig', ['controller_name' => 'EventController',]);
+    }      
+      
+    #[Route('/create', name: '_create')]
+    public function create(
+
+    ): Response
+    {
+       
+    return $this->renderForm('event/index.html.twig');
     }
 
-    #[Route('/detail/{id}', name: '_detail',requirements: ["id" => "\d+"])]
+    #[Route('/details/{id}', name: '_details',requirements: ["id" => "\d+"])]
     public function detail(
-        EventRepository $eventRepository,
+        EventRepository $event,
         Event $event
     ): Response
     {
         return $this->render('event/detail.html.twig',
-        compact('event'));
+            compact('event')
+        );
+
     }
 
     #[Route('/update/{id}', name: '_update',requirements: ["id" => "\d+"])]
@@ -69,3 +80,5 @@ class EventController extends AbstractController
 //        return $this->redirectToRoute('main_index');
 //    }
 }
+}
+

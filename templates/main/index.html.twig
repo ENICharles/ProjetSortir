@@ -28,8 +28,6 @@
         }
     </style>
 
-    <p>ici la page d'accueil</p>
-
     <form action="{{ path('main_search') }}" method="GET">
         <label for="campus">Campus</label>
         <select id="campus" name="campus">
@@ -98,10 +96,11 @@
                 </td>
             </tr>
         {% else %}
-            pas de sorties
+            <p>pas de sorties</p>
         {% endfor %}
         </tbody>
     </table>
 
+    <a href="{{ path('event_create') }}">Créer une sortie</a>
 
 {% endblock %}
