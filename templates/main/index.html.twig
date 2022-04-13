@@ -4,16 +4,7 @@
     {{ parent() }} | Accueil
 {% endblock %}
 
-{% block header %}
-    <ul>
-        <li>
-            <a href="{{ path('app_login') }}">Se connecter</a>
-        </li>
-        <li>
-            <a href="{{ path('app_register') }}">S'enregistrer</a>
-        </li>
-    </ul>
-{% endblock %}
+
 {% block body %}
     <style>
         table,
@@ -27,9 +18,6 @@
             color: #fff;
         }
     </style>
-
-    <p>ici la page d'accueil</p>
-
 
     <form action="{{ path('main_search') }}" method="GET">
         <label for="campus">Campus</label>
@@ -99,7 +87,7 @@
                 </td>
             </tr>
         {% else %}
-            pas de sorties
+            <p>pas de sorties</p>
         {% endfor %}
         </tbody>
     </table>
