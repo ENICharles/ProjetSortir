@@ -3,8 +3,13 @@
 namespace App\Form;
 
 
+use App\Entity\Campus;
+use App\Entity\City;
 use App\Entity\Event;
+use App\Entity\Localisation;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -22,6 +27,15 @@ class EventType extends AbstractType
                 [
                     "label" => 'Nom de l\'évènement ',
                     "attr" => ["class" => 'event__name']
+                ]
+            )
+
+            ->add('campus',
+                EntityType::class,
+                [
+                    "label" => 'Campus ',
+                    'class' => Campus::class,
+                    'choice_label' => "name"
                 ]
             )
 
@@ -73,14 +87,13 @@ class EventType extends AbstractType
                 ]
             )
 
-//            ->add('localisation',
-//                    EntityType::class,
-//                [
-//                    "label" => 'Lieux ',
-//                    'class' => Localisation::class,
-//                    'choice_label' => "name"
-//                ]
-//            )
+            ->add('localisation',
+                ChoiceType::class,
+                [
+                    "label" => 'Lieu '
+                ]
+            )
+
             ;
     }
 

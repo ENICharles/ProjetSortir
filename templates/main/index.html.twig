@@ -29,7 +29,7 @@
     </style>
 
     <p>ici la page d'accueil</p>
-    <a href="{{ path('event_create') }}">Créer une sortie</a>
+
 
     <form action="{{ path('main_search') }}" method="GET">
         <label for="campus">Campus</label>
@@ -104,5 +104,6 @@
         </tbody>
     </table>
 
+    <a href="{{ path('event_create') }}">Créer une sortie</a>
 
 {% endblock %}

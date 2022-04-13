@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class MainController extends AbstractController
 {
     #[Route('/', name: '_index')]
-    public function index(): Response
+    public function index(CampusRepository $cr, EventRepository $er): Response
     {
         if($this->getUser())
         {
