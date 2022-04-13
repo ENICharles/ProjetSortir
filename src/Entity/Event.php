@@ -153,6 +153,21 @@ class Event
         return $this;
     }
 
+    public function addPopUser(User $user): self
+    {
+        if (!$this->users->contains($user))
+        {
+            $this->users[] = $user;
+            $user->addEvent($this);
+        }
+        else
+        {
+            $this->removeUser($user);
+        }
+
+        return $this;
+    }
+
     public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {

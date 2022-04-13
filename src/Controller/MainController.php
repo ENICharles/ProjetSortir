@@ -8,6 +8,7 @@ use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Boolean;
 use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,14 +24,6 @@ class MainController extends AbstractController
     {
         if($this->getUser())
         {
-
-            return $this->render('main/index.html.twig', ['controller_name' => 'MainController',]);
-        }
-        else
-       {
-            return $this->redirectToRoute('app_login');
-        }
-
             $lstCampus = $cr->findAll();
             $lstEvent  = $er->findAll();
 
@@ -45,43 +38,65 @@ class MainController extends AbstractController
     #[Route('/inscription/{id}', name: '_inscription')]
     public function inscription(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
     {
-        dump("inscription");
         $lstCampus = $cr->findAll();
-
-        $this->getUser()->getUserIdentifier();
 
         $usr = $ur->findBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
-        $usr[0]->addEvent($ev);
+        /* supprime l'évènement de l'utilisateur */
+        $usr[0]->addPopEvent($ev);
 
-        $em->persist($usr);
+        $em->persist($usr[0]);
         $em->flush();
 
         return $this->redirectToRoute('main_index');
     }
 
     #[Route('/search', name: '_search')]
-    public function search(EntityManagerInterface $em, CampusRepository $cr, EventRepository $er, Request  $request): Response
+    public function search(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request): Response
     {
         $lstCampus = $cr->findAll();
         $allEvent  = $er->findAll();
 
+        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+
         $lstEvent = array();
 
-        foreach($allEvent as $event)
+        $filtre = $request->query->get('search');
+        $newArray = array_filter($allEvent,function (Event $element) use ($filtre)
         {
-            if(
-                (str_contains($event->getName(),$request->query->get('search'))) and
-                (str_contains($event->getCampus()->getName(),$request->query->get('campus'))) and
-                ($event->getDateStart() >= $request->query->get('dateStart'))
-//                ($event->getDateStart() <= $request->query->get('dateEnd'))
-            )
+            if($element->getName() === $filtre)
             {
-                array_push($lstEvent,$event);
+                $ret = true;
             }
-        }
+            else
+            {
+                $ret = false;
+            }
+
+            return $ret;
+        }, ARRAY_FILTER_USE_BOTH);
+
+
+
+        $filtre = $request->query->get('campus');
+        $newArray = array_filter($newArray,function (Event $element) use ($filtre)
+        {
+            if($element->getCampus() === $filtre)
+            {
+                $ret = true;
+            }
+            else
+            {
+                $ret = false;
+            }
+
+            return $ret;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        dd($newArray);
 
         return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
-
     }
 }
+
+

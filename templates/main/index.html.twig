@@ -48,7 +48,7 @@
         <input type="datetime-local" id="dateEnd" name="dateEnd"><br>
 
         <label for="eventManage">Sorties dont je suis l'organisateur/trice</label>
-        <input type="checkbox" id="eventManage" name="eventManage" checked><br>
+        <input type="checkbox" id="eventManage" name="eventManage"><br>
 
         <label for="eventIns">Sorties auquellezs je suis inscrit/e</label>
         <input type="checkbox" id="eventIns" name="eventIns" checked><br>
@@ -57,7 +57,7 @@
         <input type="checkbox" id="eventUnIns" name="eventUnIns" checked><br>
 
         <label for="eventOld">Sorties passée</label>
-        <input type="checkbox" id="eventOld" name="eventOld" checked><br>
+        <input type="checkbox" id="eventOld" name="eventOld" onclick="selectDate()" ><br>
 
         <input type="submit">
     </form>
@@ -72,6 +72,7 @@
             <td>Date limite d'inscription</td>
             <td>Nombre max d'inscription</td>
             <td>Etat</td>
+            <td>Inscrit</td>
             <td>Organisateur</td>
             <td>Actions</td>
          </tr>
@@ -79,22 +80,46 @@
         </thead>
         <tbody>
         {% for event in lstEvent %}
+            {% set insc = '0' %}
+            {% set orga = '0' %}
+
+            {% for usr in event.users %}
+                {% if usr.id == app.user.id %}
+                    {% set insc = '1' %}
+                {% endif %}
+
+                {% if event.organisator.id == app.user.id %}
+                    {% set orga = '1' %}
+                {% endif %}
+            {% endfor %}
             <tr>
                 <td>{{ event.name }}</td>
-                <td>{{event.dateStart | date('m/d/y h:i')}}</td>
-                <td>{{(event.dateStart) | date_modify('+' ~ event.duration ~' minutes')| date('m/d/y h:i')}}</td>
-                <td>{{event.inscriptionDateLimit | date('m/d/y h:i')}}</td>
+                <td>{{event.dateStart | date('d/m/y h:i')}}</td>
+                <td>{{(event.dateStart) | date_modify('+' ~ event.duration ~' minutes')| date('d/m/y h:i')}}</td>
+                <td>{{event.inscriptionDateLimit | date('d/m/y h:i')}}</td>
                 <td>{{event.nbMaxInscription}}</td>
                 <td>{{event.state.label}}</td>
-                <td>{{event.organisator.name}}</td>
-                <td> <a href="">Afficher</a>
+                <td>
+                    {% if insc == '1' %}
+                        x
+                    {% endif %}
+                </td>
 
-                    {% if app.user %}
-                        <a href="">- Se désister</a>
+                <td><a href="{{ path('user_detail', {'id': event.organisator.id }) }}"> {{event.organisator.username}}</a></td>
+                <td>
+{#                    <a href="{{ path('event_detail' , {'id': event.id }) }}">Afficher</a>#}
+
+                    {% if insc == '1' %}
+                        <a href="{{ path('main_inscription' , {'id': event.id }) }}">Se désister</a>
                     {% else %}
-                        <a href="{{ path('main_inscription' , {'id': event.id }) }}">- S'inscrire</a>
+                        <a href="{{ path('main_inscription' , {'id': event.id }) }}">S'inscrire</a>
                     {% endif %}
 
+                    {% if orga == '1' %}
+{#                        <a href="{{ path('main_modify' , {'id': event.id }) }}">- Modifier</a>#}
+{#                        <a href="{{ path('main_modify' , {'id': event.id }) }}">- Publier</a>#}
+{#                        <a href="{{ path('main_modify' , {'id': event.id }) }}">- Annuler</a>#}
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -103,5 +128,6 @@
         </tbody>
     </table>
 
+{#    <a href="{{ path('event_create'}}"><button>Créer sortie</button></a>#}
 
 {% endblock %}
