@@ -1,0 +1,88 @@
+/* Palettes couleurs
+   ========================================================================== */
+/* Color Theme Swatches in Hex */
+/*.Construction-road-1-hex { color: #FF793B; }*/
+/*.Construction-road-2-hex { color: #2C5A71; }*/
+/*.Construction-road-3-hex { color: #193341; }*/
+/*.Construction-road-4-hex { color: #E4F2FF; }*/
+/*.Construction-road-5-hex { color: #C6D2DE; }*/
+
+/* Squid |Color Theme Swatches in Hex */
+/*.Squid-1-hex { color: #1C8394; }*/
+/*.Squid-2-hex { color: #154B52; }*/
+/*.Squid-3-hex { color: #000B0D; }*/
+/*.Squid-4-hex { color: #390D02; }*/
+/*.Squid-5-hex { color: #A52502; }*/
+
+
+
+/* All
+   ========================================================================== */
+* {}
+
+
+/* Body
+   ========================================================================== */
+body {}
+
+
+/* Containers
+   ========================================================================== */
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 1fr 100px;
+}
+
+
+/* Header
+   ========================================================================== */
+.header {
+    grid-column: 1;
+    grid-row: 1 / 1;
+}
+.header__container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+.header__logo {}
+.header__link {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+.header__img {}
+.header__sigle {}
+
+/* Header > Nav
+   ========================================================================== */
+.nav {}
+.nav__list {
+    display: flex;
+    gap: 40px;
+}
+.nav__item {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+}
+.nav__link {}
+
+
+/* Main
+   ========================================================================== */
+.main {
+    grid-column: 1;
+    grid-row: 2 / 2;
+}
+
+
+/* Footer
+   ========================================================================== */
+.footer {
+    grid-column: 1;
+    grid-row: 3 / 3;
+}
