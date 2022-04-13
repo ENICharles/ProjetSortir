@@ -28,8 +28,6 @@
         }
     </style>
 
-    <p>ici la page d'accueil</p>
-
     <form action="{{ path('main_search') }}" method="GET">
         <label for="campus">Campus</label>
         <select id="campus" name="campus">
@@ -50,7 +48,7 @@
         <label for="eventManage">Sorties dont je suis l'organisateur/trice</label>
         <input type="checkbox" id="eventManage" name="eventManage"><br>
 
-        <label for="eventIns">Sorties auquellezs je suis inscrit/e</label>
+        <label for="eventIns">Sorties auquelles je suis inscrit/e</label>
         <input type="checkbox" id="eventIns" name="eventIns" checked><br>
 
         <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>
@@ -99,6 +97,7 @@
                 <td>{{event.inscriptionDateLimit | date('d/m/y h:i')}}</td>
                 <td>{{event.nbMaxInscription}}</td>
                 <td>{{event.state.label}}</td>
+
                 <td>
                     {% if insc == '1' %}
                         x
@@ -107,7 +106,11 @@
 
                 <td><a href="{{ path('user_detail', {'id': event.organisator.id }) }}"> {{event.organisator.username}}</a></td>
                 <td>
-{#                    <a href="{{ path('event_detail' , {'id': event.id }) }}">Afficher</a>#}
+
+
+                <td>{{event.organisator.name}}</td>
+                <td> <a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a>
+
 
                     {% if insc == '1' %}
                         <a href="{{ path('main_inscription' , {'id': event.id }) }}">Se désister</a>
@@ -123,11 +126,11 @@
                 </td>
             </tr>
         {% else %}
-            pas de sorties
+            <p>pas de sorties</p>
         {% endfor %}
         </tbody>
     </table>
+    <a href="{{ path('event_create') }}">Créer une sortie</a>
 
-{#    <a href="{{ path('event_create'}}"><button>Créer sortie</button></a>#}
 
 {% endblock %}
