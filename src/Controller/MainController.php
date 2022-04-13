@@ -23,14 +23,6 @@ class MainController extends AbstractController
     {
         if($this->getUser())
         {
-
-            return $this->render('main/index.html.twig', ['controller_name' => 'MainController',]);
-        }
-        else
-       {
-            return $this->redirectToRoute('app_login');
-        }
-
             $lstCampus = $cr->findAll();
             $lstEvent  = $er->findAll();
 
@@ -45,7 +37,6 @@ class MainController extends AbstractController
     #[Route('/inscription/{id}', name: '_inscription')]
     public function inscription(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
     {
-        dump("inscription");
         $lstCampus = $cr->findAll();
 
         $this->getUser()->getUserIdentifier();

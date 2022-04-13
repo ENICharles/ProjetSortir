@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+
+    <h2>Description de la sortie</h2>
+    <p>
+        Nom de la sortie : {{ event.name }} <br>
+        Date et heure de la sortie : {{ event.dateStart | date('d/m/Y h:i') }}<br>
+        Date limite d'inscription : {{ event.inscriptionDateLimit | date('d/m/Y h:i') }}<br>
+        Nombre de places : {{ event.nbMaxInscription }}<br>
+        Durée: {{ event.duration }} minutes<br>
+        Description et infos : {{ event.description }}<br>
+        Campus : {{ event.campus.name }}<br>
+        Lieu : {{ event.localisation.name }}<br>
+        Rue : {{ event.localisation.street }}<br>
+        Code postal : {{ event.localisation.city.postcode }}<br>
+        Latitude : {{ event.localisation.latitude }}<br>
+        Longitude : {{ event.localisation.longitude }}<br>
+    </p>
+    <h3>Liste des participants inscrits : </h3>
+    {% for u in event.users %}
+        <ul>
+            <li>{{ u.username }} / {{ u.name }}</li>
+        </ul>
+    {% endfor %}
+
+{% endblock %}
+
+
+
