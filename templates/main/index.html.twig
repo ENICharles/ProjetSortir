@@ -4,8 +4,17 @@
     {{ parent() }} | Accueil
 {% endblock %}
 
-
+{% block header %}
+    {% if app.user %}
+        <nav>
+            <a href="{{ path('main_index') }}">Accueil</a>
+            <a href="{{ path('user_profil') }}">Mon Profil</a>
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        </nav>
+    {% endif %}
+{% endblock %}
 {% block body %}
+
     <style>
         table,
         td {
@@ -39,7 +48,7 @@
         <label for="eventManage">Sorties dont je suis l'organisateur/trice</label>
         <input type="checkbox" id="eventManage" name="eventManage" checked><br>
 
-        <label for="eventIns">Sorties auquellezs je suis inscrit/e</label>
+        <label for="eventIns">Sorties auquelles je suis inscrit/e</label>
         <input type="checkbox" id="eventIns" name="eventIns" checked><br>
 
         <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>

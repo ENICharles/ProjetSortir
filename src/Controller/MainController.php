@@ -26,8 +26,6 @@ class MainController extends AbstractController
             $lstCampus = $cr->findAll();
             $lstEvent  = $er->findAll();
 
-            //dd($lstEvent);
-
             return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
         }
         else
@@ -39,7 +37,6 @@ class MainController extends AbstractController
     #[Route('/inscription/{id}', name: '_inscription')]
     public function inscription(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
     {
-        dump("inscription");
         $lstCampus = $cr->findAll();
 
         $this->getUser()->getUserIdentifier();
@@ -76,5 +73,6 @@ class MainController extends AbstractController
         }
 
         return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
+
     }
 }
