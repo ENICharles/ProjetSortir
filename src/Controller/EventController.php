@@ -29,9 +29,9 @@ class EventController extends AbstractController
     return $this->renderForm('event/index.html.twig');
     }
 
-    #[Route('/details/{id}', name: '_details',requirements: ["id" => "\d+"])]
+    #[Route('/detail/{id}', name: '_detail',requirements: ["id" => "\d+"])]
     public function detail(
-        EventRepository $event,
+        EventRepository $eventRepository,
         Event $event
     ): Response
     {
