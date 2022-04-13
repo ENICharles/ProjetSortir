@@ -51,13 +51,7 @@ class UpdateEventType extends AbstractType
                 'choice_label'=> 'name'
             ])
 
-            ->add('localisation',CollectionType::class,[
-                'entry_type' => LocalisationType::class,
-                //'data_class'=> null,
-                'data' =>[new Localisation()],
-                'label'=> false,
-
-            ])
+            ->add('localisation',LocalisationType::class)
         ;
     }
 
