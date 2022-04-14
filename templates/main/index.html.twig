@@ -4,37 +4,17 @@
     {{ parent() }} | Accueil
 {% endblock %}
 
-{% block header %}
-    {% if app.user %}
-        <nav>
-            <a href="{{ path('main_index') }}">Accueil</a>
-            <a href="{{ path('user_profil') }}">Mon Profil</a>
-            <a href="{{ path('app_logout') }}">Se déconnecter</a>
-        </nav>
-    {% endif %}
-{% endblock %}
 {% block body %}
-
-    <style>
-        table,
-        td {
-            border: 1px solid #333;
-        }
-
-        thead,
-        tfoot {
-            background-color: #333;
-            color: #fff;
-        }
-    </style>
 
     <form action="{{ path('main_search') }}" method="GET">
         <label for="campus">Campus</label>
         <select id="campus" name="campus">
-            {% for campus in  listCampus %}
-                <option value="{{ campus.name }}">{{ campus.name }}</option>
+            {% for campus in  lstCampus %}
+                <option value="{{ campus.name }}">
+                    {{ campus.name }}
+                </option>
             {% endfor %}
-        </select><br>
+        </select>
 
         <label for="search">Le nom de la sortie contient :</label>
         <input type="text" id="search" name="search"><br>
@@ -49,10 +29,10 @@
         <input type="checkbox" id="eventManage" name="eventManage"><br>
 
         <label for="eventIns">Sorties auquelles je suis inscrit/e</label>
-        <input type="checkbox" id="eventIns" name="eventIns"><br>
+        <input type="checkbox" id="eventIns" name="eventIns" checked><br>
 
         <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>
-        <input type="checkbox" id="eventUnIns" name="eventUnIns"><br>
+        <input type="checkbox" id="eventUnIns" name="eventUnIns" checked><br>
 
         <label for="eventOld">Sorties passée</label>
         <input type="checkbox" id="eventOld" name="eventOld" onclick="selectDate()" ><br>
@@ -60,76 +40,77 @@
         <input type="submit">
     </form>
 
-    <table>
-        <thead>
-        <tr><th colspan="8">Liste des events</th><tr>
-         <tr>
-            <td>Nom</td>
-            <td>Date de début</td>
-            <td>Date de fin</td>
-            <td>Date limite d'inscription</td>
-            <td>Nombre max d'inscription</td>
-            <td>Etat</td>
-            <td>Inscrit</td>
-            <td>Organisateur</td>
-            <td>Actions</td>
-         </tr>
-
-        </thead>
-        <tbody>
-        {% for event in lstEvent %}
-            {% set insc = '0' %}
-            {% set orga = '0' %}
-
-            {% for usr in event.users %}
-                {% if usr.id == app.user.id %}
-                    {% set insc = '1' %}
-                {% endif %}
-            {% endfor %}
-            {% if event.organisator.id == app.user.id %}
-                {% set orga = '1' %}
-            {% endif %}
-            <tr>
-                <td>{{ event.name }}</td>
-                <td>{{event.dateStart | date('d/m/y h:i')}}</td>
-                <td>{{(event.dateStart) | date_modify('+' ~ event.duration ~' minutes')| date('d/m/y h:i')}}</td>
-                <td>{{event.inscriptionDateLimit | date('d/m/y h:i')}}</td>
-                <td>{{event.nbMaxInscription}}</td>
-                <td>{{event.state.label}}</td>
-
-                <td>
-                    {% if insc == '1' %}
-                        x
-                    {% endif %}
-                </td>
-
-                <td><a href="{{ path('user_detail', {'id': event.organisator.id }) }}"> {{event.organisator.username}}</a></td>
-                <td>
-
-
-                <td>{{event.organisator.name}}</td>
-                <td> <a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a>
-
-
-                    {% if insc == '1' %}
-                        <a href="{{ path('event_desinscription' , {'id': event.id }) }}">Se désister</a>
-                    {% else %}
-                        <a href="{{ path('event_inscription' , {'id': event.id }) }}">S'inscrire</a>
-                    {% endif %}
-
-                    {% if orga == '1' %}
-                        <a href="{{ path('event_update' , {'id': event.id }) }}">- Modifier</a>
-{#                        <a href="{{ path('main_modify' , {'id': event.id }) }}">- Publier</a>#}
-{#                        <a href="{{ path('main_modify' , {'id': event.id }) }}">- Annuler</a>#}
-                    {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <p>pas de sorties</p>
-        {% endfor %}
-        </tbody>
-    </table>
     <a href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>
 
-
+    {#    TODO retravailler le tableau en formulaire et carte#}
+    {#    TODO créer twig view#}
 {% endblock %}
+
+ {% block event %}
+     <div class="main__card">
+         {% for event in lstEvent %}
+             <div class="card border">
+                 {% set insc = '0' %}
+                 {% set orga = '0' %}
+                 {% for usr in event.users %}
+                     {% if usr.id == app.user.id %}
+                         {% set insc = '1' %}
+                     {% endif %}
+                     <div class="card__header">
+                         <div>
+                             <h4 class="card__title border">
+                                 {{ event.name }}
+                             </h4>
+                             <p class="card__state">
+                                 {{event.state.label}}
+                             </p>
+                         </div>
+                         <div class="card__number-participant border">
+                             <p class="card__text">inscrits/places {{event.nbMaxInscription}}</p>
+                         </div>
+                     </div>
+                     <div class="card__main">
+                         <img src="{{ asset('img/img_default.png') }}" alt="image de l'événement">
+                         <div class="card__date border">
+                             <div class="card__date-start border">
+                                 <p class="card__text">date de début de l'événement</p>
+                                 <p class="card__text">{{event.dateStart | date('d/m/y h:i')}}</p>
+                             </div>
+                             <div class="card__date-end border">
+                                 <p class="card__text">clôture</p>
+                                 <p>{{(event.dateStart) | date_modify('+' ~ event.duration ~' minutes')| date('d/m/y h:i')}}</p>
+                             </div>
+                             <div class="card__registered border">
+                                 <p class="card__text">inscrit</p>
+                                 {% if insc == '1' %}
+                                     x
+                                 {% endif %}
+                             </div>
+                         </div>
+                     </div>
+                     <div class="card__footer">
+                         <div class="card__owner border">
+                             <p class="card__text">organisateur</p>
+                             <a class="card__link" href="{{ path('user_detail', {'id': event.organisator.id }) }}"> {{event.organisator.username}}</a>
+                         </div>
+                         <div class="card__action border">
+                             <p class="card__text">actions</p>
+                             {% if insc == '1' %}
+                                 <a class="card__link" href="{{ path('main_inscription' , {'id': event.id }) }}">Se désister</a>
+                             {% else %}
+                                 <a class="card__link" href="{{ path('main_inscription' , {'id': event.id }) }}">S'inscrire</a>
+                             {% endif %}
+{#                             {% if orga == '1' %}#}
+{#                                 <a href="{{ path('event_update' , {'id': event.id }) }}">- Modifier</a>#}
+{#                                 <a href="{{ path('event_delete' , {'id': event.id }) }}">- Supprimer</a>#}
+{#                                 <a href="{{ path('main_modify' , {'id': event.id }) }}">- Annuler</a>#}
+{#                             {% endif %}#}
+                         </div>
+                     </div>
+                 {% endfor %}
+             </div>
+         {% else %}
+             <p>pas de sorties</p>
+         {% endfor %}
+     </div>
+ {% endblock %}
