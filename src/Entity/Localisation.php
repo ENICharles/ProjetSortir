@@ -6,6 +6,7 @@ use App\Repository\LocalisationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LocalisationRepository::class)]
 class Localisation
@@ -16,9 +17,21 @@ class Localisation
     private $id;
 
     #[ORM\Column(type: 'string', length: 250)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 250,
+        minMessage: 'Le nombre de caractère minimum est de 2',
+        maxMessage: 'Le nombre de caractère maximum est de 250')]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 250,
+        minMessage: 'Le nombre de caractère minimum est de 2',
+        maxMessage: 'Le nombre de caractère maximum est de 255')]
     private $street;
 
     #[ORM\Column(type: 'float', nullable: true)]

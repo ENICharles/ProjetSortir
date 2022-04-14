@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -19,22 +20,50 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private $id;
 
+    #[ORM\Column(type: 'string', length: 50, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le nombre de caractère minimum est de 2',
+        maxMessage: 'Le nombre de caractère maximum est de 50',
+    )]
+    private $username;
+
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\Email]
+    #[Assert\NotBlank]
     private $email;
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
     private $password;
 
     #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le nombre de caractère minimum est de 2',
+        maxMessage: 'Le nombre de caractère maximum est de 100',
+    )]
     private $name;
 
     #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 100,
+        minMessage: 'Le nombre de caractère minimum est de 2',
+        maxMessage: 'Le nombre de caractère maximum est de 100',
+    )]
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    #[Assert\Regex(pattern: "^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$")]
     private $phone;
 
     #[ORM\Column(type: 'boolean')]
@@ -53,8 +82,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     private $campus;
 
-    #[ORM\Column(type: 'string', length: 50, unique: true)]
-    private $username;
 
     public function __construct()
     {
