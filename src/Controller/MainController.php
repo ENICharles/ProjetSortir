@@ -6,7 +6,6 @@ use App\Entity\Event;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,9 +25,7 @@ class MainController extends AbstractController
             $listCampus = $cr->findAll();
             $listEvent  = $er->findAll();
 
-            $mail->envoie($listEvent[0]);
-
-            return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
+            return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
         }
         else
         {

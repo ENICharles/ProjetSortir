@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Form\UpdateEventType;
+use App\Entity\Localisation;
+use App\Entity\User;
+use App\Form\EventType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
+use App\Repository\StateRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,21 +19,57 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/event', name: 'event')]
 class EventController extends AbstractController
 {
-    #[Route('/', name: '_index')]
-    public function index(): Response
-    {
-        return $this->render('event/index.html.twig', ['controller_name' => 'EventController',]);
-    }      
-      
-    #[Route('/create', name: '_create')]
+    /**
+     * Fonction qui permet de créer une sortie
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param User $user
+     * @param StateRepository $st
+     * @return Response
+     */
+    #[Route('/create/{id}', name: '_create',requirements: ["id" => "\d+"] )]
     public function create(
-
+    Request $request,
+    EntityManagerInterface $entityManager,
+    User $user,
+    StateRepository $st
     ): Response
     {
-       
-    return $this->renderForm('event/index.html.twig');
+        $etat= $st->findOneBy(['id'=> 1]);
+
+        $user->getId();
+
+        $event = new Event();
+        $event->setOrganisator($user);
+
+        $local = new Localisation();
+        $event->setLocalisation($local);
+        $local->addEvent($event);
+        $event->setState($etat);
+
+        $eventForm = $this->createForm(EventType::class,$event);
+
+        $eventForm->handleRequest($request);
+
+        if ($eventForm->isSubmitted() && $eventForm->isValid()){
+
+            $entityManager->persist($local);
+            $entityManager->persist($event);
+
+            $entityManager->flush();
+            return $this->redirectToRoute('main_index');
+        }
+        return $this->renderForm('event/update.html.twig',
+            compact('eventForm'));
+
     }
 
+    /**
+     * Fonction qui affiche le détail complet de la sortie
+     * @param EventRepository $eventRepository
+     * @param Event $event
+     * @return Response
+     */
     #[Route('/detail/{id}', name: '_detail',requirements: ["id" => "\d+"])]
     public function detail(
         EventRepository $eventRepository,
@@ -40,8 +79,17 @@ class EventController extends AbstractController
         return $this->render('event/detail.html.twig',
             compact('event')
         );
+
     }
 
+    /**
+     * Fonction qui permet de modifier une sortie
+     * @param Event $event
+     * @param EventRepository $eventRepository
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/update/{id}', name: '_update',requirements: ["id" => "\d+"])]
     public function update(
         Event $event,
@@ -50,7 +98,7 @@ class EventController extends AbstractController
         Request $request,
     ): Response
     {
-        $eventForm = $this->createForm(UpdateEventType::class,$event);
+        $eventForm = $this->createForm(EventType::class,$event);
 
         $eventForm->handleRequest($request);
 
@@ -63,21 +111,26 @@ class EventController extends AbstractController
         return $this->renderForm('event/update.html.twig',
             compact('eventForm'));
     }
-/*
- * todo / A vérifier avec le nouveau formulaire
- */
-//    #[Route('/delete/{id}', name: '_delete',requirements: ["id" => "\d+"])]
-//    public function delete(
-//        Event $event,
-//        EventRepository $eventRepository,
-//        EntityManagerInterface $entityManager,
-//
-//    ): Response
-//    {
-//        $entityManager->remove($event);
-//        $entityManager->flush();
-//        return $this->redirectToRoute('main_index');
-//    }
+
+    /**
+     * Fonction qui supprime une sortie sur l'affichage et en base de données
+     * @param Event $event
+     * @param EventRepository $eventRepository
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
+    #[Route('/delete/{id}', name: '_delete',requirements: ["id" => "\d+"])]
+    public function delete(
+        Event $event,
+        EventRepository $eventRepository,
+        EntityManagerInterface $entityManager,
+
+    ): Response
+    {
+        $entityManager->remove($event);
+        $entityManager->flush();
+        return $this->redirectToRoute('main_index');
+    }
 
     #[Route('/inscription/{id}', name: '_inscription')]
     public function inscription(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
