@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-
 use App\Entity\Campus;
 use App\Entity\Event;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -25,12 +24,14 @@ class EventType extends AbstractType
 
             ->add('dateStart', DateTimeType::class,[
                 'label' => 'Date de début :',
+                'widget'=> 'single_text',
                 'input_format' => 'd-m-Y H:i:s'
 
             ])
 
             ->add('inscriptionDateLimit',DateTimeType::class,[
                 'label' => 'Date de limite d\'inscription :',
+                'widget'=> 'single_text',
                 'input_format' => 'd-m-Y H:i:s'
             ])
 
@@ -41,6 +42,11 @@ class EventType extends AbstractType
 
             ->add('duration', IntegerType::class,[
                 'label'=>'Durée'
+//                'attr'=>[
+//                    'class'=> [
+//                        'unit'=>'minutes'
+//                    ]
+//    ]
             ])
 
             ->add('description', TextareaType::class)
