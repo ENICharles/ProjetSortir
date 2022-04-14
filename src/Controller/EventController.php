@@ -103,7 +103,7 @@ class EventController extends AbstractController
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* supprime l'évènement de l'utilisateur */
-        $usr>removeEvent($ev);
+        $usr->removeEvent($ev);
 
         $em->persist($usr);
         $em->flush();
