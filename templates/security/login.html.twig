@@ -5,40 +5,45 @@
 {% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="login">
+        <h2 class="login__title">Hey ;) Salut toi !</h2>
+        <form class="login__form" method="post">
+            {% if error %}
+                <div class="login__alert">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
 
-
-    {#  TODO : message de connexion ok à réécrire
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.email }}, <a href="{{ path('app_logout') }}">Logout</a>
+            {#  TODO : message de connexion ok à réécrire, faire un try catch
+        {% if app.user %}
+            <div>
+                You are logged in as {{ app.user.email }}, <a href="{{ path('app_logout') }}">Logout</a>
+            </div>
+        {% endif %}
+            #}
+            <div class="form__container">
+                <div class="form__fields">
+                    <label class="form__label" for="inputEmail">Email</label>
+                    <input class="form-control" type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
+                </div>
+                <div class="form__fields">
+                    <label class="form__label" for="inputPassword">Mot de passe</label>
+                    <input class="form__input" type="password" name="password" id="inputPassword" autocomplete="current-password" required>
+                </div>
+                <div class="form__fields">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                </div>
+                <div class="form__checkbox">
+                    <label class="form__label">
+                        <input class="form__checkbox" type="checkbox" name="_remember_me">Se souvenir de moi
+                    </label>
+                </div>
+                <button class="form__button" type="submit">Valider</button>
+            </div>
+        </form>
+        <div class="redirect">
+            <p class="redirect__text">Je suis nouveau ici</p>
+            <a class="redirect__link" href="{{ path('app_register') }}">S'inscrire</a>
         </div>
-    {% endif %}
-    #}
-
-    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Mot de passe</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
-
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me">Se souvenir de moi
-            </label>
-        </div>
-
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Valider
-    </button>
-</form>
+    </div>
 {% endblock %}

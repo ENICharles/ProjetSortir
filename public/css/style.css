@@ -79,6 +79,58 @@ body {}
     grid-row: 2 / 2;
 }
 
+/* Main > Login
+   ========================================================================== */
+.login {}
+.login__title {}
+.login__form {}
+.login__alert {}
+
+/* Main > Form
+   ========================================================================== */
+.form__container {}
+.form__fields {}
+.form__label {}
+.form__input {}
+.form__checkbox {}
+.form__button {}
+
+/* Main > Redirect
+   ========================================================================== */
+.redirect {}
+.redirect__text {}
+.redirect__link {}
+
+/* Main > Card
+   ========================================================================== */
+.main__card {
+    display: flex;
+}
+.border {
+    border: 1px solid #80808052;
+}
+.card {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 7fr;
+}
+.card__header {}
+.card__title {
+    font-size: 24px;
+    font-family: sans-serif;
+}
+.card__state {}
+.card__number-participant {}
+.card__text {}
+.card__main {}
+.card__main img {
+    width: 300px;
+}
+.card__date {}
+.card__date-start {}
+.card__date-end {}
+
+
 
 /* Footer
    ========================================================================== */
