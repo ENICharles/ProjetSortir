@@ -4,12 +4,9 @@ namespace App\Form;
 
 
 use App\Entity\Campus;
-use App\Entity\City;
 use App\Entity\Event;
-use App\Entity\Localisation;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -22,79 +19,38 @@ class EventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name',
-                TextType::class,
-                [
-                    "label" => 'Nom de l\'évènement ',
-                    "attr" => ["class" => 'event__name']
-                ]
-            )
+            ->add('name', TextType::class,[
+                'label'=>'Nom :'
+            ])
 
-            ->add('campus',
-                EntityType::class,
-                [
-                    "label" => 'Campus ',
-                    'class' => Campus::class,
-                    'choice_label' => "name"
-                ]
-            )
+            ->add('dateStart', DateTimeType::class,[
+                'label' => 'Date de début :',
+                'input_format' => 'd-m-Y H:i:s'
 
-            ->add('dateStart',
-                DateTimeType::class,
-                [
-                    "label" => 'Date et heure de la sortie',
-                    'date_widget' => 'single_text',
-                ]
-            )
+            ])
 
-            ->add('inscriptionDateLimit',
-                DateTimeType::class,
-                [
-                    "label" => 'Date limite d\'inscription',
-                    'date_widget' => 'single_text',
-                ]
-            )
+            ->add('inscriptionDateLimit',DateTimeType::class,[
+                'label' => 'Date de limite d\'inscription :',
+                'input_format' => 'd-m-Y H:i:s'
+            ])
 
-            ->add('duration',
-                IntegerType::class,
-                [
-                    "label" => 'Durée ',
-                    "attr" =>
-                        [
-                            "class" => 'duration',
-                            "step" => 1,
-                        ]
-                ]
-            )
+            ->add('nbMaxInscription', IntegerType::class,[
+                'label'=>'Nombre de places',
+                'attr'=> ['min'=>0]
+            ])
 
-            ->add('nbMaxInscription',
-                IntegerType::class,
-                [
-                    "label" => 'Nombre de places ',
-                    "attr" =>
-                        [
-                            "class" => 'event__nbMaxInscription',
-                            "step" => 1
-                        ]
-                ]
-            )
+            ->add('duration', IntegerType::class,[
+                'label'=>'Durée'
+            ])
 
-            ->add('description',
-                TextareaType::class,
-                [
-                    "label" => 'Description et infos ',
-                    "attr" => ["class" => 'event__description',]
-                ]
-            )
+            ->add('description', TextareaType::class)
 
-            ->add('localisation',
-                ChoiceType::class,
-                [
-                    "label" => 'Lieu '
-                ]
-            )
+            ->add('campus',EntityType::class,[
+                'class'=> Campus::class,
+                'choice_label'=> 'name'
+            ])
 
-            ;
+            ->add('localisation',LocalisationType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
