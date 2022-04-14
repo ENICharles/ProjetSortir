@@ -43,13 +43,11 @@ class EventController extends AbstractController
     }
 
     #[Route('/update/{id}', name: '_update',requirements: ["id" => "\d+"])]
-
     public function update(
         Event $event,
         EventRepository $eventRepository,
         EntityManagerInterface $entityManager,
         Request $request,
-
     ): Response
     {
         $eventForm = $this->createForm(UpdateEventType::class,$event);

@@ -22,18 +22,36 @@
                             <h1 class="header__sigle">Sortir.com</h1>
                         </a>
                     </div>
-                    <nav class="nav">
-                        <ul class="nav__list">
-                            <li class="nav__item">
-                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                <a class="nav__link" href="{{ path('app_login') }}">Se connecter</a>
-                            </li>
-                            <li class="nav__item">
-                                <i class="fa-solid fa-id-badge"></i>
-                                <a href="{{ path('app_register') }}">S'enregistrer</a>
-                            </li>
-                        </ul>
-                    </nav>
+                    {% if app.user %}
+                        <nav class="nav">
+                            <ul class="nav__list">
+                                <li class="nav__item">
+                                    <a href="{{ path('user_profil') }}">Mon Profil</a>
+                                </li>
+                                <li class="nav__item">
+                                    <a class="nav__link" href="{{ path('app_logout') }}">Se déconnecter</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    {% endif %}
+                    {% if not app.user %}
+                        <nav class="nav">
+                            <ul class="nav__list">
+                                <li class="nav__item">
+                                    <a class="nav__link" href="{{ path('app_login') }}">
+                                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                        Se connecter
+                                    </a>
+                                </li>
+                                <li class="nav__item">
+                                    <a href="{{ path('app_register') }}">
+                                        <i class="fa-solid fa-id-badge"></i>
+                                        S'enregistrer
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    {% endif %}
                 </div>
             </header>
             <main class="main">
