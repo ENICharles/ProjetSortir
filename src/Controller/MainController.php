@@ -2,32 +2,33 @@
 
 namespace App\Controller;
 
-use App\Entity\Campus;
 use App\Entity\Event;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Boolean;
-use PhpParser\Node\Expr\Array_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints as Assert;
+use App\services\Mailing;
+
 
 #[Route('/',name:'main')]
 class MainController extends AbstractController
 {
     #[Route('/', name: '_index')]
-    public function index(CampusRepository $cr, EventRepository $er): Response
+    public function index(CampusRepository $cr, EventRepository $er,Mailing $mail): Response
     {
         if($this->getUser())
         {
-            $lstCampus = $cr->findAll();
-            $lstEvent  = $er->findAll();
+            $listCampus = $cr->findAll();
+            $listEvent  = $er->findAll();
 
-            return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
+            $mail->envoie($listEvent[0]);
+
+            return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
         }
         else
         {
@@ -35,67 +36,161 @@ class MainController extends AbstractController
         }
     }
 
-    #[Route('/inscription/{id}', name: '_inscription')]
-    public function inscription(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
-    {
-        $lstCampus = $cr->findAll();
-
-        $usr = $ur->findBy(['email'  => $this->getUser()->getUserIdentifier()]);
-
-        /* supprime l'évènement de l'utilisateur */
-        $usr[0]->addPopEvent($ev);
-
-        $em->persist($usr[0]);
-        $em->flush();
-
-        return $this->redirectToRoute('main_index');
-    }
-
     #[Route('/search', name: '_search')]
     public function search(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request): Response
     {
-        $lstCampus = $cr->findAll();
-        $allEvent  = $er->findAll();
+        $listCampus = $cr->findAll();
+
+        $qb = $er->createQueryBuilder('e');
+
+        if($request->query->get('eventOld'))
+        {
+            $dateNowM1M    = (new \DateTime())->modify('-1 month');
+
+            $qb
+                ->andWhere('e.dateStart > :from')
+                ->setParameter('from', $dateNowM1M );
+        }
+        else
+        {
+            $dateDebut  = new \DateTime($request->query->get('dateStart'));
+            $dateFin    = new \DateTime($request->query->get('dateEnd'));
+
+            $qb
+                ->andWhere('e.dateStart BETWEEN :from AND :to')
+                ->setParameter('from', $dateDebut )
+                ->setParameter('to', $dateFin);
+        }
+
+        $listEvent = $qb->getQuery()->getResult();
 
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
-        $lstEvent = array();
-
-        $filtre = $request->query->get('search');
-        $newArray = array_filter($allEvent,function (Event $element) use ($filtre)
+        if($request->query->get('search'))
         {
-            if($element->getName() === $filtre)
+            $filtre = $request->query->get('search');
+            $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
             {
-                $ret = true;
-            }
-            else
-            {
-                $ret = false;
-            }
+                if (str_contains($element->getName(),$filtre))
+                {
+                    $ret = true;
+                } else {
+                    $ret = false;
+                }
 
-            return $ret;
-        }, ARRAY_FILTER_USE_BOTH);
+                return $ret;
+            }, ARRAY_FILTER_USE_BOTH);
 
+            $listEvent = $newArray;
+        }
 
-
-        $filtre = $request->query->get('campus');
-        $newArray = array_filter($newArray,function (Event $element) use ($filtre)
+        if($request->query->get('campus'))
         {
-            if($element->getCampus() === $filtre)
+            $filtre = $request->query->get('campus');
+            $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
             {
-                $ret = true;
-            }
-            else
+                if ($element->getCampus()->getName() === $filtre) {
+                    $ret = true;
+                } else {
+                    $ret = false;
+                }
+
+                return $ret;
+            }, ARRAY_FILTER_USE_BOTH);
+
+            $listEvent = $newArray;
+        }
+
+        if($request->query->get('eventManage'))
+        {
+            $filtre = $usr->getId();
+            $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
             {
-                $ret = false;
+                if ($element->getOrganisator()->getId() === $filtre) {
+                    $ret = true;
+                } else {
+                    $ret = false;
+                }
+
+                return $ret;
+            }, ARRAY_FILTER_USE_BOTH);
+
+            $listEvent = $newArray;
+        }
+
+        if(($request->query->get('eventIns')) && ($request->query->get('eventUnIns')))
+        {
+            $filtre = $usr;
+            $newArray = array_filter($listEvent, function (Event $element) use ($filtre) {
+                if (($element->getUsers()->contains($filtre))  or (!$element->getUsers()->contains($filtre)))
+                {
+                    $ret = true;
+                } else {
+                    $ret = false;
+                }
+
+                return $ret;
+            }, ARRAY_FILTER_USE_BOTH);
+
+            $listEvent = $newArray;
+        }
+        else
+        {
+            if ($request->query->get('eventIns')) {
+                $filtre = $usr;
+                $newArray = array_filter($listEvent, function (Event $element) use ($filtre) {
+                    if ($element->getUsers()->contains($filtre)) {
+                        $ret = true;
+                    } else {
+                        $ret = false;
+                    }
+
+                    return $ret;
+                }, ARRAY_FILTER_USE_BOTH);
+
+                $listEvent = $newArray;
             }
 
-            return $ret;
-        }, ARRAY_FILTER_USE_BOTH);
+            if ($request->query->get('eventUnIns'))
+            {
+                dump("pas");
+                $filtre = $usr;
+                $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
+                {
+                    if (!$element->getUsers()->contains($filtre))
+                    {
+                        $ret = true;
+                    }
+                    else
+                    {
+                        $ret = false;
+                    }
 
-        dd($newArray);
+                    return $ret;
+                }, ARRAY_FILTER_USE_BOTH);
 
-        return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
+                $listEvent = $newArray;
+            }
+        }
+
+        if($request->query->get('eventOld'))
+        {
+            $filtre = $usr->getId();
+            $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
+            {
+                if ($element->getOrganisator()->getId() === $filtre) {
+                    $ret = true;
+                } else {
+                    $ret = false;
+                }
+
+                return $ret;
+            }, ARRAY_FILTER_USE_BOTH);
+
+            $listEvent = $newArray;
+        }
+
+        return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
     }
 }
 

@@ -31,7 +31,7 @@
     <form action="{{ path('main_search') }}" method="GET">
         <label for="campus">Campus</label>
         <select id="campus" name="campus">
-            {% for campus in  lstCampus %}
+            {% for campus in  listCampus %}
                 <option value="{{ campus.name }}">{{ campus.name }}</option>
             {% endfor %}
         </select><br>
@@ -49,10 +49,10 @@
         <input type="checkbox" id="eventManage" name="eventManage"><br>
 
         <label for="eventIns">Sorties auquelles je suis inscrit/e</label>
-        <input type="checkbox" id="eventIns" name="eventIns" checked><br>
+        <input type="checkbox" id="eventIns" name="eventIns"><br>
 
         <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>
-        <input type="checkbox" id="eventUnIns" name="eventUnIns" checked><br>
+        <input type="checkbox" id="eventUnIns" name="eventUnIns"><br>
 
         <label for="eventOld">Sorties passée</label>
         <input type="checkbox" id="eventOld" name="eventOld" onclick="selectDate()" ><br>
@@ -77,7 +77,7 @@
 
         </thead>
         <tbody>
-        {% for event in lstEvent %}
+        {% for event in listEvent %}
             {% set insc = '0' %}
             {% set orga = '0' %}
 
@@ -113,13 +113,13 @@
 
 
                     {% if insc == '1' %}
-                        <a href="{{ path('main_inscription' , {'id': event.id }) }}">Se désister</a>
+                        <a href="{{ path('event_desinscription' , {'id': event.id }) }}">Se désister</a>
                     {% else %}
-                        <a href="{{ path('main_inscription' , {'id': event.id }) }}">S'inscrire</a>
+                        <a href="{{ path('event_inscription' , {'id': event.id }) }}">S'inscrire</a>
                     {% endif %}
 
                     {% if orga == '1' %}
-{#                        <a href="{{ path('main_modify' , {'id': event.id }) }}">- Modifier</a>#}
+                        <a href="{{ path('event_update' , {'id': event.id }) }}">- Modifier</a>
 {#                        <a href="{{ path('main_modify' , {'id': event.id }) }}">- Publier</a>#}
 {#                        <a href="{{ path('main_modify' , {'id': event.id }) }}">- Annuler</a>#}
                     {% endif %}
