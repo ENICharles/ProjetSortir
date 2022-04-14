@@ -18,7 +18,7 @@ use App\services\Mailing;
 class MainController extends AbstractController
 {
     #[Route('/', name: '_index')]
-    public function index(CampusRepository $cr, EventRepository $er,Mailing $mail): Response
+    public function index(CampusRepository $cr, EventRepository $er): Response
     {
         if($this->getUser())
         {

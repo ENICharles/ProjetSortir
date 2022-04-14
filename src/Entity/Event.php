@@ -6,6 +6,7 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -16,18 +17,33 @@ class Event
     private $id;
 
     #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 100,
+        minMessage: 'Le nombre de caractère minimum est de 2',
+        maxMessage: 'Le nombre de caractère maximum est de 100',
+    )]
     private $name;
 
     #[ORM\Column(type: 'datetime')]
+    #[Assert\NotBlank]
     private $dateStart;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank]
     private $duration;
 
     #[ORM\Column(type: 'datetime')]
+    #[Assert\NotBlank]
     private $inscriptionDateLimit;
 
     #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 1000,
+        maxMessage: 'Le nombre d\'inscrits ne peut pas dépasser 1000'
+    )]
     private $nbMaxInscription;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

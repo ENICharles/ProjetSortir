@@ -61,8 +61,7 @@ class ProfilType extends AbstractType
             ])
             ->add('campus', EntityType::class,[
                'class'=>Campus::class,
-               'choice_label' => 'name',
-               'expanded'=>true
+               'choice_label' => 'name'
             ])
 
         ;
