@@ -25,7 +25,7 @@ class MainController extends AbstractController
             $listCampus = $cr->findAll();
             $listEvent  = $er->findAll();
 
-            return $this->render('main/index.html.twig', compact('lstCampus','lstEvent'));
+            return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
         }
         else
         {
