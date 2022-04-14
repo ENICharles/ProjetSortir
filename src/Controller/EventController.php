@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Form\UpdateEventType;
+use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +31,7 @@ class EventController extends AbstractController
     return $this->renderForm('event/index.html.twig');
     }
 
-    #[Route('/details/{id}', name: '_details',requirements: ["id" => "\d+"])]
+    #[Route('/detail/{id}', name: '_detail',requirements: ["id" => "\d+"])]
     public function detail(
         EventRepository $eventRepository,
         Event $event
@@ -78,5 +80,37 @@ class EventController extends AbstractController
 //        $entityManager->flush();
 //        return $this->redirectToRoute('main_index');
 //    }
+
+    #[Route('/inscription/{id}', name: '_inscription')]
+    public function inscription(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
+    {
+        $lstCampus = $cr->findAll();
+
+        $usr = $ur->findBy(['email'  => $this->getUser()->getUserIdentifier()]);
+
+        /* Ajout l'évènement de l'utilisateur */
+        $usr[0]->addEvent($ev);
+
+        $em->persist($usr[0]);
+        $em->flush();
+
+        return $this->redirectToRoute('main_index');
+    }
+
+    #[Route('/desinscription/{id}', name: '_desinscription')]
+    public function desinscription(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
+    {
+        $lstCampus = $cr->findAll();
+
+        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+
+        /* supprime l'évènement de l'utilisateur */
+        $usr>removeEvent($ev);
+
+        $em->persist($usr);
+        $em->flush();
+
+        return $this->redirectToRoute('main_index');
+    }
 }
 
