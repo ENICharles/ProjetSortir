@@ -3,6 +3,7 @@
 namespace App\services;
 
 use App\Entity\Event;
+use App\Entity\User;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -16,39 +17,58 @@ class Mailing
     }
 
     /**
-     * @brief : Envoie un mail à tous les inscrit de l'évènement
+     * Envoie un mail à l'utilisateur, pour valider son inscription
      * @param Event $event
      * @return void
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function envoie(Event $event)
+    public function confrimationInscription(Event $event,User $user)
+    {
+        $email = (new Email())
+            ->from('admin@eni.fr')
+            ->to($user->getEmail())
+            ->subject("Evènement : " . $event->getName())
+            ->text("Vous êtes inscrit à l'évènement : " . $event->getName());
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un mail à l'uttilisateur pour son désistement
+     * @param Event $event
+     * @return void
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function confrimationDesistement(Event $event,User $user)
+    {
+        $email = (new Email())
+            ->from('admin@eni.fr')
+            ->to($user->getEmail())
+            ->subject("Evènement : " . $event->getName())
+            ->text("Vous n'êtes plus inscrit à l'évènement : " . $event->getName());
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Envoie un mail à tous les uttilisateurs
+     * @param Event $event
+     * @param string $subject
+     * @param string $body
+     * @return void
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function sendToAllUserEvent(Event $event, string $subject,string $body)
     {
         foreach ($event->getUsers() as $u)
         {
             $email = (new Email())
                 ->from('admin@eni.fr')
                 ->to($u->getEmail())
-                ->subject("Evènement : " . $event->getName())
-                ->text("Vous êtes inscrit pour l'évènement : " . $event->getName());
+                ->subject($subject)
+                ->text($body);
 
             $this->mailer->send($email);
         }
-    }
-
-    /**
-     * @brief : Envoie un mail à l'utilisateur, pour valider son inscription
-     * @param Event $event
-     * @return void
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
-     */
-    public function confirmInscription(User $user)
-    {
-        $email = (new Email())
-            ->from('admin@eni.fr')
-            ->to($user->getEmail())
-            ->subject("Bienvenue sur la plateforme Sortie.com" )
-            ->text("Félicitation " . $user->getName() . ", tu peux, dès maintenant consulter les évènements à venir.");
-
-        $this->mailer->send($email);
     }
 }
