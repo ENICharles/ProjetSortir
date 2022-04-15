@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-
 use App\Entity\Campus;
 use App\Entity\Event;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -25,13 +24,15 @@ class EventType extends AbstractType
 
             ->add('dateStart', DateTimeType::class,[
                 'label' => 'Date de début :',
-                'input_format' => 'd-m-Y H:i:s'
+                'widget'=> 'single_text',
+                'input_format' => 'yyyy-MM-dd HH:mm'
 
             ])
 
             ->add('inscriptionDateLimit',DateTimeType::class,[
                 'label' => 'Date de limite d\'inscription :',
-                'input_format' => 'd-m-Y H:i:s'
+                'widget'=> 'single_text',
+                'input_format' => 'd/m/Y H:i:'
             ])
 
             ->add('nbMaxInscription', IntegerType::class,[
@@ -40,7 +41,9 @@ class EventType extends AbstractType
             ])
 
             ->add('duration', IntegerType::class,[
-                'label'=>'Durée'
+                'label'=>'Durée',
+                'help'=> 'minutes'
+
             ])
 
             ->add('description', TextareaType::class)
@@ -50,7 +53,9 @@ class EventType extends AbstractType
                 'choice_label'=> 'name'
             ])
 
-            ->add('localisation',LocalisationType::class);
+            ->add('localisation',LocalisationType::class,[
+                'label'=> false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

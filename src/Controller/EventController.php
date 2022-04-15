@@ -96,16 +96,24 @@ class EventController extends AbstractController
         EventRepository $eventRepository,
         EntityManagerInterface $entityManager,
         Request $request,
+        UserRepository $ur
     ): Response
     {
         $eventForm = $this->createForm(EventType::class,$event);
 
-        $eventForm->handleRequest($request);
+        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
-        if ($eventForm->isSubmitted() && $eventForm->isValid()){
-            $entityManager->persist($event);
-            $entityManager->flush();
-            return $this->redirectToRoute('main_index');
+        /* ctrl si l'utilisateur connecté est l'orgnanisateur de l'evenement */
+        if($usr->getId() == $event->getOrganisator()->getId())
+        {
+            $eventForm->handleRequest($request);
+
+            if ($eventForm->isSubmitted() && $eventForm->isValid())
+            {
+                $entityManager->persist($event);
+                $entityManager->flush();
+                return $this->redirectToRoute('main_index');
+            }
         }
 
         return $this->renderForm('event/update.html.twig',
@@ -124,11 +132,18 @@ class EventController extends AbstractController
         Event $event,
         EventRepository $eventRepository,
         EntityManagerInterface $entityManager,
+        UserRepository $ur
 
     ): Response
     {
-        $entityManager->remove($event);
-        $entityManager->flush();
+        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+
+        /* ctrl si l'utilisateur connecté est l'orgnanisateur de l'evenement */
+        if($usr->getId() == $event->getOrganisator()->getId())
+        {
+            $entityManager->remove($event);
+            $entityManager->flush();
+        }
         return $this->redirectToRoute('main_index');
     }
 
@@ -137,12 +152,12 @@ class EventController extends AbstractController
     {
         $lstCampus = $cr->findAll();
 
-        $usr = $ur->findBy(['email'  => $this->getUser()->getUserIdentifier()]);
+        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* Ajout l'évènement de l'utilisateur */
-        $usr[0]->addEvent($ev);
+        $usr->addEvent($ev);
 
-        $em->persist($usr[0]);
+        $em->persist($usr);
         $em->flush();
 
         return $this->redirectToRoute('main_index');
