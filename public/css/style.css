@@ -18,7 +18,9 @@
 
 /* All
    ========================================================================== */
-* {}
+* {
+    font-family: sans-serif;
+}
 
 
 /* Body
@@ -103,21 +105,26 @@ body {}
 
 /* Main > Card
    ========================================================================== */
+.border {
+     border: 1px solid #80808052;
+ }
+
 .main__card {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
 }
-.border {
-    border: 1px solid #80808052;
-}
+
 .card {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 7fr;
+    grid-template-rows: repeat(3, 1fr);
+    /*padding: 20px;*/
 }
 .card__header {}
 .card__title {
     font-size: 24px;
-    font-family: sans-serif;
 }
 .card__state {}
 .card__number-participant {}
@@ -126,7 +133,9 @@ body {}
 .card__main img {
     width: 300px;
 }
-.card__date {}
+.card__date {
+    display: flex;
+}
 .card__date-start {}
 .card__date-end {}
 
