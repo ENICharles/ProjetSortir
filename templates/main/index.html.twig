@@ -6,117 +6,116 @@
 
 {% block body %}
 
-    <form action="{{ path('main_search') }}" method="GET">
-        <label for="campus">Campus</label>
-        <select id="campus" name="campus">
-            {% for campus in  listCampus %}
-                <option value="{{ campus.name }}">
-                    {{ campus.name }}
-                </option>
-            {% endfor %}
-        </select>
+    {{ form_start(filterForm) }}
+    {{ form_widget(filterForm) }}
+    <button>Rechercher</button>
+    {{ form_end(filterForm) }}
 
-        <label for="search">Le nom de la sortie contient :</label>
-        <input type="text" id="search" name="search"><br>
 
-        <label for="dateStar">Entre</label>
-        <input type="datetime-local" id="dateStart" name="dateStart"><br>
+{#    <form action="{{ path('main_search') }}" method="GET">#}
+{#        <label for="campus">Campus</label>#}
+{#        <select id="campus" name="campus">#}
+{#            {% for campus in  listCampus %}#}
+{#                <option value="{{ campus.name }}">#}
+{#                    {{ campus.name }}#}
+{#                </option>#}
+{#            {% endfor %}#}
+{#        </select>#}
 
-        <label for="dateEnd">Et :</label>
-        <input type="datetime-local" id="dateEnd" name="dateEnd"><br>
+{#        <label for="search">Le nom de la sortie contient :</label>#}
+{#        <input type="text" id="search" name="search"><br>#}
 
-        <label for="eventManage">Sorties dont je suis l'organisateur/trice</label>
-        <input type="checkbox" id="eventManage" name="eventManage"><br>
+{#        <label for="dateStar">Entre</label>#}
+{#        <input type="datetime-local" id="dateStart" name="dateStart"><br>#}
 
-        <label for="eventIns">Sorties auquelles je suis inscrit/e</label>
-        <input type="checkbox" id="eventIns" name="eventIns" checked><br>
+{#        <label for="dateEnd">Et :</label>#}
+{#        <input type="datetime-local" id="dateEnd" name="dateEnd"><br>#}
 
-        <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>
-        <input type="checkbox" id="eventUnIns" name="eventUnIns" checked><br>
+{#        <label for="eventManage">Sorties dont je suis l'organisateur/trice</label>#}
+{#        <input type="checkbox" id="eventManage" name="eventManage"><br>#}
 
-        <label for="eventOld">Sorties passée</label>
-        <input type="checkbox" id="eventOld" name="eventOld" onclick="selectDate()" ><br>
+{#        <label for="eventIns">Sorties auquelles je suis inscrit/e</label>#}
+{#        <input type="checkbox" id="eventIns" name="eventIns" checked><br>#}
 
-        <input type="submit">
-    </form>
+{#        <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>#}
+{#        <input type="checkbox" id="eventUnIns" name="eventUnIns" checked><br>#}
 
-    <a href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>
+{#        <label for="eventOld">Sorties passée</label>#}
+{#        <input type="checkbox" id="eventOld" name="eventOld" onclick="selectDate()" ><br>#}
+
+{#        <input type="submit">#}
+{#    </form>#}
+
+{#    <a href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>#}
 
     {#    TODO retravailler le tableau en formulaire et carte#}
     {#    TODO créer twig view#}
 {% endblock %}
 
- {% block event %}
-     <div class="main__card">
-         {% for event in listEvent %}
-             <div class="card border">
-                 {% set insc = '0' %}
-                 {% set orga = '0' %}
-                 {% for usr in event.users %}
-                     {% if usr.id == app.user.id %}
-                         {% set insc = '1' %}
-                     {% endif %}
-                 {% endfor %}
-                 <div class="card__header">
-                     <div>
-                         <h4 class="card__title border">
-                             {{ event.name }}
-                         </h4>
-                         <p class="card__state">
-                             {{event.state.label}}
-                         </p>
-                     </div>
-                     <div class="card__number-participant border">
-                         <p class="card__text">inscrits/places {{event.nbMaxInscription}}</p>
-                     </div>
-                 </div>
-                 <div class="card__main">
-{#                         <img src="{{ asset('img/img_default.png') }}" alt="image de l'événement">#}
-                     <div class="card__date border">
-                         <div class="card__date-start border">
-                             <p class="card__text">date de début de l'événement</p>
-                             <p class="card__text">{{event.dateStart | date('d/m/y h:i')}}</p>
-                         </div>
-                         <div class="card__date-end border">
-                             <p class="card__text">clôture</p>
-                             <p>{{(event.dateStart) | date_modify('+' ~ event.duration ~' minutes')| date('d/m/y h:i')}}</p>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="card__footer">
-                     <div class="card__registered border">
-                         <p class="card__text">inscrit</p>
-                         {% if insc == '1' %}
-                             x
-                         {% endif %}
-                     </div>
-                     <div class="card__owner border">
-                         <p class="card__text">organisateur</p>
-                         <a class="card__link" href="{{ path('user_detail', {'id': event.organisator.id }) }}">
-                             {{event.organisator.username}}
-                         </a>
-                     </div>
-                     <div class="card__action border">
-                         <p class="card__text">actions</p>
-                         {% if insc == '1' %}
-                             <a class="card__link" href="{{ path('event_desinscription' , {'id': event.id }) }}">
-                                 Se désister
-                             </a>
-                         {% else %}
-                             <a class="card__link" href="{{ path('event_inscription' , {'id': event.id }) }}">
-                                 S'inscrire
-                             </a>
-                         {% endif %}
+{# {% block event %}#}
+{#     <div class="main__card">#}
+{#         {% for event in listEvent %}#}
+{#             <div class="card border">#}
+{#                 {% set insc = '0' %}#}
+{#                 {% set orga = '0' %}#}
+{#                 {% for usr in event.users %}#}
+{#                     {% if usr.id == app.user.id %}#}
+{#                         {% set insc = '1' %}#}
+{#                     {% endif %}#}
+{#                 {% endfor %}#}
+{#                 <div class="card__header">#}
+{#                     <h4 class="card__title border">{{ event.name }}</h4>#}
+{#                     <p class="card__state">{{event.state.label}}</p>#}
+{#                 </div>#}
+{#                 <div class="card__number-place">#}
+{#                     <p class="card__text">inscrits/places {{event.nbMaxInscription}}</p>#}
+{#                 </div>#}
+{#                 <div class="card__date">#}
+{#                     <div class="card__date border">#}
+{#                         <div class="card__date-start border">#}
+{#                             <p class="card__text">date de début</p>#}
+{#                             <p class="card__text">{{event.dateStart | date('d/m/y h:i')}}</p>#}
+{#                         </div>#}
+{#                         <div class="card__date-end border">#}
+{#                             <p class="card__text">date de fin</p>#}
+{#                             <p class="card__text">{{(event.dateStart) | date_modify('+' ~ event.duration ~' minutes')| date('d/m/y h:i')}}</p>#}
+{#                         </div>#}
+{#                     </div>#}
+{#                 </div>#}
+{#                 <div class="card__footer">#}
+{#                     <div class="card__registered border">#}
+{#                         <p class="card__text">inscrit</p>#}
+{#                         {% if insc == '1' %}#}
+{#                             oui#}
+{#                         {% endif %}#}
+{#                     </div>#}
+{#                     <div class="card__owner border">#}
+{#                         <p class="card__text">organisateur</p>#}
+{#                         <a class="card__link" href="{{ path('user_detail', {'id': event.organisator.id }) }}">#}
+{#                             {{event.organisator.username}}#}
+{#                         </a>#}
+{#                     </div>#}
+{#                     <div class="card__action border">#}
+{#                         <p class="card__text">actions</p>#}
+{#                         {% if insc == '1' %}#}
+{#                             <a class="card__link" href="{{ path('event_desinscription' , {'id': event.id }) }}">#}
+{#                                 Se désister#}
+{#                             </a>#}
+{#                         {% else %}#}
+{#                             <a class="card__link" href="{{ path('event_inscription' , {'id': event.id }) }}">#}
+{#                                 S'inscrire#}
+{#                             </a>#}
+{#                         {% endif %}#}
 {#                             {% if orga == '1' %}#}
 {#                                 <a href="{{ path('event_update' , {'id': event.id }) }}">- Modifier</a>#}
 {#                                 <a href="{{ path('event_delete' , {'id': event.id }) }}">- Supprimer</a>#}
 {#                                 <a href="{{ path('main_modify' , {'id': event.id }) }}">- Annuler</a>#}
 {#                             {% endif %}#}
-                     </div>
-                 </div>
-             </div>
-         {% else %}
-             <p>pas de sorties</p>
-         {% endfor %}
-     </div>
- {% endblock %}
+{#                     </div>#}
+{#                 </div>#}
+{#             </div>#}
+{#         {% else %}#}
+{#             <p>pas de sorties</p>#}
+{#         {% endfor %}#}
+{#     </div>#}
+{# {% endblock %}#}

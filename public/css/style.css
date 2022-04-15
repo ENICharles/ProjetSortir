@@ -120,7 +120,7 @@ body {}
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, 1fr);
-    padding: 20px;
+    /*padding: 20px;*/
 }
 .card__header {}
 .card__title {
