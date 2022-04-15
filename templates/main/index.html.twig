@@ -101,11 +101,11 @@
                              {% else %}
                                  <a class="card__link" href="{{ path('event_inscription' , {'id': event.id }) }}">S'inscrire</a>
                              {% endif %}
-{#                             {% if orga == '1' %}#}
-{#                                 <a href="{{ path('event_update' , {'id': event.id }) }}">- Modifier</a>#}
-{#                                 <a href="{{ path('event_delete' , {'id': event.id }) }}">- Supprimer</a>#}
-{#                                 <a href="{{ path('main_modify' , {'id': event.id }) }}">- Annuler</a>#}
-{#                             {% endif %}#}
+                             {% if orga == '1' %}
+                                 <a href="{{ path('event_update' , {'id': event.id }) }}">- Modifier</a>
+                                 <a href="{{ path('event_delete' , {'id': event.id }) }}">- Supprimer</a>
+                             {% endif %}
+                             <a href="{{ path('event_detail' , {'id': event.id }) }}">- Afficher</a>
                          </div>
                      </div>
 
