@@ -43,6 +43,7 @@ class MainController extends AbstractController
         $listCampus     = $cr->findAll();
         $selectedCampus = $cr->findOneBy(['name'=>$request->query->get('campus')]);
         $usr            = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+        $isInscrit      = null;
 
 //        if($request->query->get('eventOld'))
 //        {
@@ -63,10 +64,28 @@ class MainController extends AbstractController
 //            }
 //        }
 
-        $dateDebut  = new DateTime($request->query->get('dateStart'));
-        $dateFin    = new DateTime($request->query->get('dateEnd'));
-        $listEvent = $er->findbyFilter($selectedCampus,$dateDebut,$dateFin,$request->query->get('search'),
-            'true','true','true','false',$usr);
+        if(($request->query->get('dateStart')) and ($request->query->get('dateEnd')))
+        {
+            $dateDebut  = new DateTime($request->query->get('dateStart'));
+            $dateFin    = new DateTime($request->query->get('dateEnd'));
+        }
+        else
+        {
+            $dateDebut = (new DateTime())->modify('-1 month');
+            $dateFin   = (new DateTime())->modify('+42 year');
+        }
+
+        if(!$request->query->get('eventIns'))
+        {
+            $isInscrit = null;
+        }
+        else
+        {
+            $isInscrit = $usr;
+        }
+
+        $listEvent = $er->findbyFilter($selectedCampus,$dateDebut,$dateFin,$request->query->get('search'),'true',$isInscrit,'true',$isInscrit,$usr);
+
 
         return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
 

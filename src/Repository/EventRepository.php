@@ -147,8 +147,8 @@ class EventRepository extends ServiceEntityRepository
                                  DateTime $fin,
                                  string   $motClef,
                                  string  $manage,
-                                 string  $inscrit,
-                                 string  $notInscrit,
+                                 User  $inscrit,
+                                 User  $notInscrit,
                                  string  $older,
                                  User     $usr)
     {
@@ -157,27 +157,35 @@ class EventRepository extends ServiceEntityRepository
         /* recherche de l'état passée */
         $state = $sr->findOneBy(['id'=>'5']);
 
+        dump($campus);
+        dump($debut);
+        dump($fin);
+        dump($motClef);
+        dump($state);
+
         $rq = $this->createQueryBuilder('e');
 
         $rq->andWhere('e.campus    =  :cp');
         $rq->andWhere('e.dateStart >= :limite');
         $rq->andWhere('e.dateStart >= :debut');
         $rq->andWhere('e.dateStart <= :fin');
-        $rq->andWhere('e.name    LIKE :mc');
+        $rq->andWhere('e.name     LIKE :mc');
         $rq->andWhere('e.state     != :state');
 
+        $rq->andWhere(':ins MEMBER OF e.users');
+
 //        $rq->andWhere('e.organisator = :mng');
-//        $rq->andWhere(':ins MEMBER OF e.users');
 //        $rq->andWhere('e.dateStart <= :noins');
 
         $rq->setParameter('limite', (new DateTime())->modify('-1 month'));
         $rq->setParameter('cp',     $campus);
         $rq->setParameter('debut',  $debut);
         $rq->setParameter('fin',    $fin);
-        $rq->setParameter('mc',     $motClef);
+        $rq->setParameter('mc',     '%'.$motClef.'%');
+
+        $rq->setParameter('ins',    $inscrit);
 
 //        $rq->setParameter('mng',    $usr);
-//        $rq->setParameter('ins',    $inscrit);
 //        $rq->setParameter('noins',  $notInscrit);
 
         $rq->setParameter('state',  $state);
