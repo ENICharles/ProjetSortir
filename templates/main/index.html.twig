@@ -57,6 +57,9 @@
                          {% set insc = '1' %}
                      {% endif %}
                  {% endfor %}
+                 {% if event.organisator.id == app.user.id %}
+                     {% set orga = '1' %}
+                 {% endif %}
                      <div class="card__header">
                          <div>
                              <h4 class="card__title border">
