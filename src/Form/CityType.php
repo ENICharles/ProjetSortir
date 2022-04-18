@@ -27,10 +27,10 @@ class CityType extends AbstractType
             ->add('postcode',TextType::class,
                 [
                     'required' => true,
-                    'label' => 'Code postale : ',
+                    'label' => 'Code postal : ',
                     'constraints' =>
                         [
-                            new NotBlank(['message' => 'Merci de saisir un code postale'])
+                            new NotBlank(['message' => 'Merci de saisir un code postal'])
                         ]
                 ])
         ;
