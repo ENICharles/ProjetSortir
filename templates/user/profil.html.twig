@@ -5,15 +5,21 @@
 {% endblock %}
 
 {% block body %}
+
 <div class="user_main border">
+    {% for message in app.flashes('error_pseudo') %}
+        <div class="alert alert-erreur">
+            {{ message }}
+        </div>
+    {% endfor %}
     <h1 class="user_h1">Mon profil</h1>
     <img class="img_profil" src="{{ asset('img/profil.png') }}" alt="photo de profil">
     <div class="user_form">
         {{ form_start(userForm) }}
         {{ form_widget(userForm) }}
-        <button>Enregistrer</button>
+        <button class="user_button">Enregistrer</button>
         {{ form_end(userForm) }}
-        <a href="{{ path('main_index') }}"><button>Annuler</button></a>
+        <a href="{{ path('main_index') }}"><button class="user_button">Annuler</button></a>
     </div>
 </div>
 
