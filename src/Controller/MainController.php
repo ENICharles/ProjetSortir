@@ -3,9 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\Filter;
+
+use App\Form\FilterType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
+use App\Repository\FilterRepository;
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,14 +23,11 @@ use App\services\Mailing;
 class MainController extends AbstractController
 {
     #[Route('/', name: '_index')]
-    public function index(CampusRepository $cr, EventRepository $er): Response
+    public function index(CampusRepository $cr,UserRepository $ur,EventRepository $er): Response
     {
         if($this->getUser())
         {
-            $listCampus = $cr->findAll();
-            $listEvent  = $er->findAll();
-
-            return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
+            return $this->redirectToRoute('main_search');
         }
         else
         {
@@ -33,161 +35,93 @@ class MainController extends AbstractController
         }
     }
 
+    /**
+     * Gestion des filtres
+     * @param EntityManagerInterface $em
+     * @param UserRepository $ur
+     * @param CampusRepository $cr
+     * @param EventRepository $er
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
+     */
     #[Route('/search', name: '_search')]
-    public function search(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request): Response
+    public function search(
+        EntityManagerInterface $em,
+        UserRepository $ur,
+        CampusRepository $cr,
+        EventRepository $er,
+        FilterRepository $filterRepository,
+        Request  $request): Response
     {
-        $listCampus = $cr->findAll();
+        $motClef        = $request->query->get('search');
+        $isManager      = null;
+        $isInscrit      = null;
+        $isNotInscrit   = null;
+        $isPassed       = false;
 
-        $qb = $er->createQueryBuilder('e');
+        /* recherche tous les campus */
+        $listCampus     = $cr->findAll();
 
-        if($request->query->get('eventOld'))
+        $selectedCampus = ($ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]))->getCampus();//  TODO : passer le campus de l'utilisateur au formulaire
+
+        $usr            = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+
+        /* si les dates sont remplies ET que le filtre passé n'est pas selectionné */
+        if(($request->query->get('dateStart')) and ($request->query->get('dateEnd')) && (!$request->query->get('eventOld')))
         {
-            $dateNowM1M    = (new \DateTime())->modify('-1 month');
-
-            $qb
-                ->andWhere('e.dateStart > :from')
-                ->setParameter('from', $dateNowM1M );
+            $dateDebut  = new DateTime($request->query->get('dateStart'));
+            $dateFin    = new DateTime($request->query->get('dateEnd'));
+            $older      = false;
         }
         else
         {
-            $dateDebut  = new \DateTime($request->query->get('dateStart'));
-            $dateFin    = new \DateTime($request->query->get('dateEnd'));
-
-            $qb
-                ->andWhere('e.dateStart BETWEEN :from AND :to')
-                ->setParameter('from', $dateDebut )
-                ->setParameter('to', $dateFin);
-        }
-
-        $listEvent = $qb->getQuery()->getResult();
-
-        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
-
-        if($request->query->get('search'))
-        {
-            $filtre = $request->query->get('search');
-            $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
+            /* si les dates ne sont pas remplie ET le filtre passé n'est pas selectionné */
+            if((!$request->query->get('dateStart')) and (!$request->query->get('dateEnd')) and (!$request->query->get('eventOld')))
             {
-                if (str_contains($element->getName(),$filtre))
-                {
-                    $ret = true;
-                } else {
-                    $ret = false;
-                }
-
-                return $ret;
-            }, ARRAY_FILTER_USE_BOTH);
-
-            $listEvent = $newArray;
-        }
-
-        if($request->query->get('campus'))
-        {
-            $filtre = $request->query->get('campus');
-            $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
-            {
-                if ($element->getCampus()->getName() === $filtre) {
-                    $ret = true;
-                } else {
-                    $ret = false;
-                }
-
-                return $ret;
-            }, ARRAY_FILTER_USE_BOTH);
-
-            $listEvent = $newArray;
-        }
-
-        if($request->query->get('eventManage'))
-        {
-            $filtre = $usr->getId();
-            $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
-            {
-                if ($element->getOrganisator()->getId() === $filtre) {
-                    $ret = true;
-                } else {
-                    $ret = false;
-                }
-
-                return $ret;
-            }, ARRAY_FILTER_USE_BOTH);
-
-            $listEvent = $newArray;
-        }
-
-        if(($request->query->get('eventIns')) && ($request->query->get('eventUnIns')))
-        {
-            $filtre = $usr;
-            $newArray = array_filter($listEvent, function (Event $element) use ($filtre) {
-                if (($element->getUsers()->contains($filtre))  or (!$element->getUsers()->contains($filtre)))
-                {
-                    $ret = true;
-                } else {
-                    $ret = false;
-                }
-
-                return $ret;
-            }, ARRAY_FILTER_USE_BOTH);
-
-            $listEvent = $newArray;
-        }
-        else
-        {
-            if ($request->query->get('eventIns')) {
-                $filtre = $usr;
-                $newArray = array_filter($listEvent, function (Event $element) use ($filtre) {
-                    if ($element->getUsers()->contains($filtre)) {
-                        $ret = true;
-                    } else {
-                        $ret = false;
-                    }
-
-                    return $ret;
-                }, ARRAY_FILTER_USE_BOTH);
-
-                $listEvent = $newArray;
+                $dateDebut = (new DateTime())->modify('-1 month');
+                $dateFin   = (new DateTime())->modify('+42 year');
+                $older      = false;
             }
-
-            if ($request->query->get('eventUnIns'))
+            else
             {
-                dump("pas");
-                $filtre = $usr;
-                $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
+                /* si pas de date mais filtre passé */
+                if((!$request->query->get('dateStart')) and (!$request->query->get('dateEnd')) and ($request->query->get('eventOld')))
                 {
-                    if (!$element->getUsers()->contains($filtre))
-                    {
-                        $ret = true;
-                    }
-                    else
-                    {
-                        $ret = false;
-                    }
-
-                    return $ret;
-                }, ARRAY_FILTER_USE_BOTH);
-
-                $listEvent = $newArray;
+                    $dateDebut = (new DateTime())->modify('-1 month');
+                    $dateFin   = (new DateTime())->modify('+42 year');
+                    $older = true;
+                }
+                else
+                {
+                    dump('autre filtre');
+                }
             }
         }
 
-        if($request->query->get('eventOld'))
+        $request->query->get('eventManage') ? $isManager    = $usr : $isManager     = null;
+        $request->query->get('eventIns')    ? $isInscrit    = $usr : $isInscrit     = null;
+        $request->query->get('eventUnIns')  ? $isNotInscrit = $usr : $isNotInscrit  = null;
+
+        $listEvent = $er->findbyFilter( $selectedCampus,
+                                        $dateDebut,
+                                        $dateFin,
+                                        $motClef,
+                                        $isManager,
+                                        $isInscrit,
+                                        $isNotInscrit,
+                                        $isPassed);
+
+        $filter = new Filter();
+        $filterForm = $this->createForm(FilterType::class, $filter);
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isSubmitted() && $filterForm->isValid())
         {
-            $filtre = $usr->getId();
-            $newArray = array_filter($listEvent, function (Event $element) use ($filtre)
-            {
-                if ($element->getOrganisator()->getId() === $filtre) {
-                    $ret = true;
-                } else {
-                    $ret = false;
-                }
-
-                return $ret;
-            }, ARRAY_FILTER_USE_BOTH);
-
-            $listEvent = $newArray;
+            return $this->redirectToRoute('main_index');
         }
 
-        return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
+        return $this->renderForm('main/index.html.twig',compact('listCampus','listEvent','filterForm'));
     }
 }
 

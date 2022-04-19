@@ -1,0 +1,13 @@
+
+{% extends 'base.html.twig' %}
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    {{ form_start(citytForm) }}
+    {{ form_widget(citytForm) }}
+    <button>Enregistrer</button>
+    {{ form_end(citytForm) }}
+    <a href="{{ path('main_index') }}"><button>Annuler</button></a>
+{% endblock %}
