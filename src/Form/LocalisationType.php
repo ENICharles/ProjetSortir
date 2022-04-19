@@ -6,28 +6,34 @@ use App\Entity\City;
 use App\Entity\Localisation;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LocalisationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+//Todo / formulaire de localisation affiche une donnée en dur
         $builder
             ->add('city',EntityType::class,[
                 'label'=>'Ville',
                 'class' => City::class,
                 'choice_label' => 'postcode'
             ])
-            ->add('name', TextType::class,[
+
+            ->add('name', null,[
                 'label'=>'Nom du lieu'
+
             ])
-            ->add('street', TextType::class,[
+            ->add('street', null,[
                 'label'=>'Rue'
+
             ])
-            ->add('latitude')
-            ->add('longitude')
+            ->add('latitude',TextType::class)
+            ->add('longitude',TextType::class)
 
         ;
     }

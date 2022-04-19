@@ -8,6 +8,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\BooleanFilterType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -60,11 +62,30 @@ class FilterType extends AbstractType
             ->add( 'isOrganisator',
                 CheckboxType::class,
                 [
-                    'label' => 'Sorties dont je suis l\'organisateur',
                     'required' => false,
+                    'label' => "Sorties dont je suis l\'organisateur"
+                ]
+            )
+            ->add('isRegistered',
+                    CheckboxType::class,
+                [
+                    'label' => "Sorties auxquelles je suis inscrit/e"
                 ]
 
             )
+            ->add('isNotRegistered',
+                CheckboxType::class,
+                [
+                    'label' => "Sorties auxquelles je ne suis pas inscrit/e"
+                ]
+            )
+            ->add('isPassedEvent',
+                CheckboxType::class,
+                [
+                    'label' => "Sorties passées"
+                ]
+            )
+
         ;
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event)

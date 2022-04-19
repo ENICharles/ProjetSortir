@@ -20,18 +20,22 @@ class ProfilType extends AbstractType
     {
         $builder
             ->add('username',TextType::class,[
-                'label'=>'Pseudo'
+                'label'=>'Pseudo',
+                "attr" => ['class' => "user"]
             ])
             ->add('name',TextType::class,[
-                'label'=>'Nom : '
+                'label'=>'Nom : ',
+                "attr" => ['class' => "user"]
 
             ])
             ->add('firstname',TextType::class,[
-                'label'=>'Prénom : '
+                'label'=>'Prénom : ',
+                "attr" => ['class' => "user"]
 
             ])
             ->add('email',TextType::class,[
-                'label'=>'Email : '
+                'label'=>'Email : ',
+                "attr" => ['class' => "user"]
 
             ])
             ->add('password',RepeatedType::class,[
@@ -52,16 +56,18 @@ class ProfilType extends AbstractType
                         'minMessage' => 'Votre mot de passe doit contenir au moins 6 caractères',
                         'max' => 15,
                     ]),
-                ],
+                ]
 
             ])
             ->add('phone',TextType::class,[
-                'label'=>'Téléphone : '
+                'label'=>'Téléphone : ',
+                "attr" => ['class' => "user"]
 
             ])
             ->add('campus', EntityType::class,[
                'class'=>Campus::class,
-               'choice_label' => 'name'
+               'choice_label' => 'name',
+                "attr" => ['class' => "user"]
             ])
 
         ;
