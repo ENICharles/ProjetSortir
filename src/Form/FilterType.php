@@ -85,9 +85,7 @@ class FilterType extends AbstractType
                     'label' => "Sorties passées "
                 ]
             )
-
         ;
-
     }
 
 
