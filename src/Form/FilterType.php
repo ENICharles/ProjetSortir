@@ -28,12 +28,14 @@ class FilterType extends AbstractType
             ->add('name',
                 TextType::class,
                 [
+                    'required'=>false,
                     'label' => 'Nom de la sortie '
                 ]
             )
             ->add('dateStart',
                 DateTimeType::class,
                 [
+                    'required'=>false,
                     'label' => 'Entre ',
                     'html5' => true,
                     'widget' => 'single_text',
@@ -44,16 +46,16 @@ class FilterType extends AbstractType
             ->add('inscriptionDateLimit',
                 DateTimeType::class,
                 [
+                    'required'=>false,
                     "label" => 'Et ',
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s'
                 ]
             )
 
-            ->add( 'organisator',
-                EntityType::class,
+            ->add( 'isOrganisator',
+                CheckboxType::class,
                 [
-                    'class' => EventType::class,
                     'label' => 'Sorties dont je suis l\'organisateur',
                     'required' => false,
                 ]
