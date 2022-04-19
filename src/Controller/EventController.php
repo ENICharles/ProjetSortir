@@ -8,6 +8,7 @@ use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
+use App\Repository\LocalisationRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,22 +28,22 @@ class EventController extends AbstractController
      * @param StateRepository $st
      * @return Response
      */
-    #[Route('/create/{id}', name: '_create',requirements: ["id" => "\d+"] )]
+    #[Route('/create', name: '_create')]
     public function create(
     Request $request,
     EntityManagerInterface $entityManager,
-    User $user,
-    StateRepository $st
+    UserRepository $userRepository,
+    StateRepository $st,
+    LocalisationRepository $localisationRepository
     ): Response
     {
         $etat= $st->findOneBy(['id'=> 1]);
 
-        $user->getId();
+        $user = $userRepository->findOneBy(['id'=>$this->getUser()->getUserIdentifier()]);
 
         $event = new Event();
         $event->setOrganisator($user);
-
-        $local = new Localisation();
+        $local = $localisationRepository->findOneBy(['id'=> 1]);
         $event->setLocalisation($local);
         $local->addEvent($event);
         $event->setState($etat);

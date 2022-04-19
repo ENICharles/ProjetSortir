@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Filter;
+
 use App\Form\FilterType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
@@ -26,13 +27,6 @@ class MainController extends AbstractController
     {
         if($this->getUser())
         {
-            $listCampus = $cr->findAll();
-            $usrCampus = ($ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]))->getCampus();//  TODO : passer le campus de l'utilisateur au formulaire
-
-            /* recherche des évènements de moins d'un mois ayant pour campus : $listCampus[0] */
-            $listEvent  = $er->findAll1M($listCampus[0]);
-
-//            return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
             return $this->redirectToRoute('main_search');
         }
         else
@@ -60,11 +54,17 @@ class MainController extends AbstractController
         FilterRepository $filterRepository,
         Request  $request): Response
     {
+        $motClef        = $request->query->get('search');
+        $isManager      = null;
+        $isInscrit      = null;
+        $isNotInscrit   = null;
+        $isPassed       = false;
 
         /* recherche tous les campus */
         $listCampus     = $cr->findAll();
-//        $selectedCampus = $cr->findOneBy(['name'=>$request->query->get('campus')]);
-        $selectedCampus = ($ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]))->getCampus();
+
+        $selectedCampus = ($ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]))->getCampus();//  TODO : passer le campus de l'utilisateur au formulaire
+
         $usr            = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* si les dates sont remplies ET que le filtre passé n'est pas selectionné */
@@ -99,16 +99,9 @@ class MainController extends AbstractController
             }
         }
 
-        $motClef        = $request->query->get('search');
-        $isManager      = null;
-        $isInscrit      = null;
-        $isNotInscrit   = null;
-        $isPassed       = false;
-
         $request->query->get('eventManage') ? $isManager    = $usr : $isManager     = null;
         $request->query->get('eventIns')    ? $isInscrit    = $usr : $isInscrit     = null;
         $request->query->get('eventUnIns')  ? $isNotInscrit = $usr : $isNotInscrit  = null;
-
 
         $listEvent = $er->findbyFilter( $selectedCampus,
                                         $dateDebut,
@@ -120,14 +113,7 @@ class MainController extends AbstractController
                                         $isPassed,
                                         $usr);
 
-//        return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
-
         $filter = new Filter();
-
-
-//        $filterRepository->findOneBy(['campus' => $this->getUser()->getUserIdentifier()]);
-//        $user = $userRepository->findOneBy(['campus' => $this->getUser()->getUserIdentifier()]);
-
         $filterForm = $this->createForm(FilterType::class, $filter);
         $filterForm->handleRequest($request);
 
@@ -135,10 +121,11 @@ class MainController extends AbstractController
         {
             return $this->redirectToRoute('main_index');
         }
+      
         return $this->renderForm('main/index.html.twig',
             compact( 'filterForm', 'listEvent'));
-//            compact('listCampus','listEvent', 'filterForm'));
 
+        return $this->renderForm('main/index.html.twig',compact('listCampus','listEvent','filterForm'));
     }
 }
 

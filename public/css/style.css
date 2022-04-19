@@ -120,6 +120,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 40px;
+
 }
 
 .card {
@@ -183,7 +184,43 @@ body {
     background-color: #2CAEEE;
 }
 
+/* User
+   ========================================================================== */
 
+/* User_profil
+   ========================================================================== */
+.user_main{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 38px;
+    grid-template-rows: 100px 1fr 100px;
+    font-family: 'Andada Pro', serif;
+}
+.user_h1{
+    grid-column: 1/6;
+    grid-row: 1;
+    text-align: center;
+}
+.img_profil{
+    width: 250px;
+    grid-column: 2;
+    grid-row: 2;
+}
+.user_form{
+    grid-column: 3/5;
+    grid-row: 2;
+}
+.user{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+.password-field{
+    display: flex;
+}
+.user_button{
+
+}
 
 /* Footer
    ========================================================================== */
