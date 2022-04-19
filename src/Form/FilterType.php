@@ -13,7 +13,11 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use App\Entity\Product;
 
 class FilterType extends AbstractType
 {
@@ -30,12 +34,14 @@ class FilterType extends AbstractType
             ->add('name',
                 TextType::class,
                 [
+                    'required'=>false,
                     'label' => 'Nom de la sortie '
                 ]
             )
             ->add('dateStart',
                 DateTimeType::class,
                 [
+                    'required'=>false,
                     'label' => 'Entre ',
                     'html5' => true,
                     'widget' => 'single_text',
@@ -46,6 +52,7 @@ class FilterType extends AbstractType
             ->add('inscriptionDateLimit',
                 DateTimeType::class,
                 [
+                    'required'=>false,
                     "label" => 'Et ',
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s'
@@ -55,6 +62,7 @@ class FilterType extends AbstractType
             ->add( 'isOrganisator',
                 CheckboxType::class,
                 [
+                    'required' => false,
                     'label' => "Sorties dont je suis l\'organisateur"
                 ]
             )
@@ -79,6 +87,20 @@ class FilterType extends AbstractType
             )
 
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event)
+        {
+            $product = $event->getData();
+            $form = $event->getForm();
+
+            if (!$product || null === $product->getId())
+            {
+                $form->add('name', TextType::class);
+                            dd('test');
+            }
+
+
+        });
     }
 
 

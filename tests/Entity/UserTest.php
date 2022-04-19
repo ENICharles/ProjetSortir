@@ -2,55 +2,127 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\Event;
 use App\Entity\User;
+use App\Repository\CampusRepository;
+use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function testUser(): void
+    public function testId(): void
     {
-       // $this->assertTrue(true);
-        $user = (new User())
-        ->setName("Martin")
-        ->setFirstname('Gertrude')
-        ->setUsername('Gigi')
-        ->setPassword('000000')
-       // ->setCampus('Eni')
-        ->setEmail('gigi@eni.fr')
-        ->setRoles([])
-        ->setIsActive(true)
-        ->setIsAdmin(false)
-        ->setPhone('0625456325');
+        $user = new User();
+
+        $this->assertNull($user->getId());
+    }
+
+    public function testName(): void
+    {
+        $user = (new User())->setName("Martin");
 
         $this->assertEquals("Martin", $user->getName());
-        $this->assertNotEquals("Dupont", $user->getName());
+    }
+
+    public function testFirstname(): void
+    {
+        $user = (new User())->setFirstname('Gertrude');
 
         $this->assertEquals("Gertrude", $user->getFirstname());
-        $this->assertNotEquals("Marie", $user->getFirstname());
+    }
 
-        $this->assertEquals("Gigi", $user->getUsername());
-        $this->assertNotEquals("bob49", $user->getUsername());
+    public function testUsername(): void
+    {
+        $user = (new User())->setUsername('GIGI');
 
-        $this->assertEquals("000000", $user->getPassword());
-        $this->assertNotEquals("zjdioazjj", $user->getPassword());
+        $this->assertEquals("GIGI", $user->getUsername());
+    }
 
-        $this->assertEquals("Eni", $user->getCampus());
-        $this->assertNotEquals("Fac", $user->getCampus());
+    public function testPassword(): void
+    {
+        $user = (new User())->setPassword('023456');
+
+        $this->assertEquals("023456", $user->getPassword());;
+    }
+
+    public function testCampus(CampusRepository $cr): void
+    {
+        $campus = $cr->findOneBy(['id'=>1]);
+
+        $user = (new User())->setCampus($campus);
+
+        $this->assertObjectEquals($campus, $user->getCampus());
+    }
+
+    public function testEmail(): void
+    {
+        $user = (new User())->setEmail('gigi@eni.fr');
 
         $this->assertEquals("gigi@eni.fr", $user->getEmail());
-        $this->assertNotEquals("bob@eni.fr", $user->getEmail());
+    }
 
-        $this->assertEquals([], $user->getRoles());
-        $this->assertNotEquals(1, $user->getRoles());
+    public function testIdentifier(): void
+    {
+        $user = (new User())->setEmail('gigi@eni.fr');
+
+        $this->assertEquals("gigi@eni.fr", $user->getUserIdentifier());
+    }
+
+    public function testRoles(): void
+    {
+        $user = (new User())->setRoles([1]);
+
+        $this->assertEquals([1], $user->getRoles());
+    }
+
+    public function testActive(): void
+    {
+        $user = (new User())->setIsActive(true);
 
         $this->assertEquals(true, $user->getIsActive());
-        $this->assertNotEquals(false, $user->getIsActive());
+    }
+
+    public function testAdmin(): void
+    {
+        $user = (new User())->setIsAdmin(false);
 
         $this->assertEquals(false, $user->getIsAdmin());
-        $this->assertNotEquals(true, $user->getIsAdmin());
-
-        $this->assertEquals("0625456325", $user->getPhone());
-        $this->assertNotEquals("0000000000", $user->getPhone());
-
     }
+
+    public function testPhone(): void
+    {
+        $user = (new User())->setPhone('0123456978');
+
+        $this->assertEquals('0123456978', $user->getPhone());
+    }
+
+    public function testEventAdd(): void
+    {
+        $ev = (new Event())->setName('EventTest');
+
+        $user = new User();
+
+        /* pas d'évènement */
+        $this->assertEquals(0, $user->getEvents()->count());
+
+        /* ajout de l'évènement */
+        $user->addEvent($ev);
+
+        /* validation de l'ajout */
+        $this->assertEquals(1, $user->getEvents()->count());
+    }
+
+    public function testEventRemove(): void
+    {
+        $ev = (new Event())->setName('EventTest');
+
+        $user = new User();
+
+        $user->addEvent($ev);
+        $this->assertEquals(1, $user->getEvents()->count());
+        $user->removeEvent($ev);
+        $this->assertEquals(0, $user->getEvents()->count());
+    }
+
+
 }
