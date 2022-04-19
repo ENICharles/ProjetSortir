@@ -24,22 +24,35 @@ class UserController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher
     ): Response
     {
+        $flag = false;
        $profil = $userRepository->findBy(
            ['email'=> $this->getUser()->getUserIdentifier()]);
        $userForm = $this->createForm(ProfilType::class, $profil[0]);
        $userForm->handleRequest($request);
           /*TODO / Vérification du changement de pseudo si pas unique page d'erreur*/
 
+
        if ($userForm->isSubmitted() && $userForm->isValid()){
-           $profil[0]->setPassword(
-               $userPasswordHasher->hashPassword(
-                   $profil[0],
-                   $userForm->get('password')->getData()
-               )
-           );
-            $em->persist($profil[0]);
-            $em->flush();
-            return $this->redirectToRoute('main_index');
+
+           $pseudo = $userForm['username']->getData();
+           $pseudoBdD = $userRepository->findAll();
+           foreach ($pseudoBdD as $key => $value){
+               if($value->getUsername() === $pseudo){
+                   $this->addFlash('error_pseudo', 'Pseudo déjà existant');
+                   $flag = true;
+                   return $this->redirectToRoute('user_profil');
+               }
+           }
+               if ($flag == false){
+                   $profil[0]->setPassword(
+                       $userPasswordHasher->hashPassword(
+                           $profil[0],
+                           $userForm->get('password')->getData()
+                       ));
+                   $em->persist($profil[0]);
+                   $em->flush();
+                   return $this->redirectToRoute('main_index');
+               }
        }
        return $this->renderForm('user/profil.html.twig',
            compact('userForm'));
