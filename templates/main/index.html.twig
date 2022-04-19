@@ -6,41 +6,47 @@
 
 {% block body %}
 
-    <form action="{{ path('main_search') }}" method="GET">
-        <label for="campus">Campus</label>
-        <select id="campus" name="campus">
-            {% for campus in  listCampus %}
-                <option value="{{ campus.name }}">
-                    {{ campus.name }}
-                </option>
-            {% endfor %}
-        </select>
+    {{ form_start(filterForm) }}
+    {{ form_widget(filterForm) }}
+    <button>Rechercher</button>
+    {{ form_end(filterForm) }}
 
-        <label for="search">Le nom de la sortie contient :</label>
-        <input type="text" id="search" name="search"><br>
 
-        <label for="dateStar">Entre</label>
-        <input type="datetime-local" id="dateStart" name="dateStart"><br>
+{#    <form action="{{ path('main_search') }}" method="GET">#}
+{#        <label for="campus">Campus</label>#}
+{#        <select id="campus" name="campus">#}
+{#            {% for campus in  listCampus %}#}
+{#                <option value="{{ campus.name }}">#}
+{#                    {{ campus.name }}#}
+{#                </option>#}
+{#            {% endfor %}#}
+{#        </select>#}
 
-        <label for="dateEnd">Et :</label>
-        <input type="datetime-local" id="dateEnd" name="dateEnd"><br>
+{#        <label for="search">Le nom de la sortie contient :</label>#}
+{#        <input type="text" id="search" name="search"><br>#}
 
-        <label for="eventManage">Sorties dont je suis l'organisateur/trice</label>
-        <input type="checkbox" id="eventManage" name="eventManage"><br>
+{#        <label for="dateStar">Entre</label>#}
+{#        <input type="datetime-local" id="dateStart" name="dateStart"><br>#}
 
-        <label for="eventIns">Sorties auquelles je suis inscrit/e</label>
-        <input type="checkbox" id="eventIns" name="eventIns"><br>
+{#        <label for="dateEnd">Et :</label>#}
+{#        <input type="datetime-local" id="dateEnd" name="dateEnd"><br>#}
 
-        <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>
-        <input type="checkbox" id="eventUnIns" name="eventUnIns"><br>
+{#        <label for="eventManage">Sorties dont je suis l'organisateur/trice</label>#}
+{#        <input type="checkbox" id="eventManage" name="eventManage"><br>#}
 
-        <label for="eventOld">Sorties passée</label>
-        <input type="checkbox" id="eventOld" name="eventOld" onclick="selectDate()" ><br>
+{#        <label for="eventIns">Sorties auquelles je suis inscrit/e</label>#}
+{#        <input type="checkbox" id="eventIns" name="eventIns" checked><br>#}
 
-        <input type="submit">
-    </form>
+{#        <label for="eventUnIns">Sorties dont je ne suis pas inscrit/e</label>#}
+{#        <input type="checkbox" id="eventUnIns" name="eventUnIns" checked><br>#}
 
-    <a href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>
+{#        <label for="eventOld">Sorties passée</label>#}
+{#        <input type="checkbox" id="eventOld" name="eventOld" onclick="selectDate()" ><br>#}
+
+{#        <input type="submit">#}
+{#    </form>#}
+
+{#    <a href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>#}
 
     {#    TODO retravailler le tableau en formulaire et carte#}
     {#    TODO créer twig view#}
@@ -111,8 +117,7 @@
                              <a href="{{ path('event_detail' , {'id': event.id }) }}">- Afficher</a>
                          </div>
                      </div>
-
-             </div>
+            </div>
          {% else %}
              <p>pas de sorties</p>
          {% endfor %}

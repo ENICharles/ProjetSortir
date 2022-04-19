@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\Filter;
+use App\Form\FilterType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
+use App\Repository\FilterRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,7 +32,8 @@ class MainController extends AbstractController
             /* recherche des évènements de moins d'un mois ayant pour campus : $listCampus[0] */
             $listEvent  = $er->findAll1M($listCampus[0]);
 
-            return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
+//            return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
+            return $this->redirectToRoute('main_search');
         }
         else
         {
@@ -48,8 +52,15 @@ class MainController extends AbstractController
      * @throws \Exception
      */
     #[Route('/search', name: '_search')]
-    public function search(EntityManagerInterface $em,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request): Response
+    public function search(
+        EntityManagerInterface $em,
+        UserRepository $ur,
+        CampusRepository $cr,
+        EventRepository $er,
+        FilterRepository $filterRepository,
+        Request  $request): Response
     {
+
         /* recherche tous les campus */
         $listCampus     = $cr->findAll();
         $selectedCampus = $cr->findOneBy(['name'=>$request->query->get('campus')]);
@@ -109,6 +120,24 @@ class MainController extends AbstractController
                                         $usr);
 
         return $this->render('main/index.html.twig', compact('listCampus','listEvent'));
+
+        $filter = new Filter();
+        $filterRepository->findOneBy(['campus' => $this->getUser()->getUserIdentifier()]);
+
+        $filterForm = $this->createForm(FilterType::class, $filter);
+        $filterForm->handleRequest($request);
+
+        if ($filterForm->isSubmitted() && $filterForm->isValid())
+        {
+            return $this->redirectToRoute('main_index');
+        }
+        //return $this->redirectToRoute('main_search');
+
+
+//        return $this->renderForm('main/index.html.twig',
+//            compact( 'filterForm'));
+//            compact('listCampus','listEvent', 'filterForm'));
+
     }
 }
 
