@@ -18,11 +18,10 @@ class LocalisationType extends AbstractType
     {
 //Todo / formulaire de localisation affiche une donnée en dur
         $builder
-            ->add('city',EntityType::class,[
-                'label'=>'Ville',
-                'class' => City::class,
-                'choice_label' => 'postcode'
-            ])
+            ->add('city',CityType::class,[
+                'label'=>false
+                ]
+            )
 
             ->add('name', null,[
                 'label'=>'Nom du lieu'

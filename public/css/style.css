@@ -231,8 +231,30 @@ body {
     display: flex;
 }
 .user_button{
-
+    margin-top: 8px;
 }
+/* User_detail
+   ========================================================================== */
+.user_detail_h2{
+    text-align: center;
+    margin-top: 45px;
+}
+.detail{
+    display: grid;
+    text-align: center;
+    margin-top: 45px;
+}
+.detail_p{
+margin-top: 15px;
+}
+.detail_lien{
+    margin-top: 45px;
+}
+/* Event
+   ========================================================================== */
+
+/* Event_create
+   ========================================================================== */
 
 /* Footer
    ========================================================================== */
