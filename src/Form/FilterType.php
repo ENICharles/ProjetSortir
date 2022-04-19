@@ -11,7 +11,11 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use App\Entity\Product;
 
 class FilterType extends AbstractType
 {
@@ -62,6 +66,20 @@ class FilterType extends AbstractType
 
             )
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event)
+        {
+            $product = $event->getData();
+            $form = $event->getForm();
+
+            if (!$product || null === $product->getId())
+            {
+                $form->add('name', TextType::class);
+                            dd('test');
+            }
+
+
+        });
     }
 
 
