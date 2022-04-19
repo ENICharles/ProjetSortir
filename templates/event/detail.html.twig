@@ -24,11 +24,8 @@
     <h3>Liste des participants inscrits : </h3>
     {% for u in event.users %}
         <ul>
-            <li>{{ u.username }} / {{ u.name }}</li>
+            <li> <a href="{{ path('user_detail', {'id': u.id}) }}">{{ u.username }}</a> / {{ u.name }}</li>
         </ul>
     {% endfor %}
 
 {% endblock %}
-
-
-
