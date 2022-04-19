@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('erreur') %}
+        <div class="alert alert-erreur">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {{ form_start(localisationForm) }}
+    {{ form_widget(localisationForm) }}
+    <button>Enregistrer</button>
+    {{ form_end(localisationForm) }}
+    <a href="{{ path('main_index') }}"><button>Annuler</button></a>
+    {#    <a href="{{ path('event_delete') }}"><button>Supprimer la sortie</button></a>#}
+{% endblock %}
