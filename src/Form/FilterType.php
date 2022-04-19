@@ -82,7 +82,7 @@ class FilterType extends AbstractType
             ->add('isPassedEvent',
                 CheckboxType::class,
                 [
-                    'label' => "Sorties passées"
+                    'label' => "Sorties passées "
                 ]
             )
 

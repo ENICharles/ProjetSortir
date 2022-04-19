@@ -46,16 +46,14 @@
 {#        <input type="submit">#}
 {#    </form>#}
 
-{#    <a href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>#}
+    <a href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>
 
-    {#    TODO retravailler le tableau en formulaire et carte#}
-    {#    TODO créer twig view#}
 {% endblock %}
 
  {% block event %}
      <div class="main__card">
          {% for event in listEvent %}
-             <div class="card border">
+             <div class="card">
                  {% set insc = '0' %}
                  {% set orga = '0' %}
                  {% for usr in event.users %}
@@ -67,57 +65,59 @@
                      {% set orga = '1' %}
                  {% endif %}
                      <div class="card__header">
-                         <div>
-                             <h4 class="card__title border">
+                         <div class="card__nav">
+                             <h4 class="card__title">
                                  {{ event.name }}
                              </h4>
                              <p class="card__state">
                                  {{event.state.label}}
                              </p>
                          </div>
-                         <div class="card__number-participant border">
-                             <p class="card__text">inscrits/places {{event.nbMaxInscription}}</p>
-                         </div>
+
                      </div>
                      <div class="card__main">
-{#                         <img src="{{ asset('img/img_default.png') }}" alt="image de l'événement">#}
-                         <div class="card__date border">
-                             <div class="card__date-start border">
+                         <div class="card__date">
+                             <div class="card__date-days">
                                  <p class="card__text">date de début de l'événement</p>
                                  <p class="card__text">{{event.dateStart | date('d/m/y h:i')}}</p>
                              </div>
-                             <div class="card__date-end border">
+                             <div class="card__date-days">
                                  <p class="card__text">clôture</p>
                                  <p>{{(event.dateStart) | date_modify('+' ~ event.duration ~' minutes')| date('d/m/y h:i')}}</p>
                              </div>
-                             <div class="card__registered border">
+                             <div class="card__registered">
                                  <p class="card__text">inscrit</p>
                                  {% if insc == '1' %}
                                      x
                                  {% endif %}
                              </div>
                          </div>
+                         <div class="card__owner-participant">
+                             <div class="card__owner">
+                                 <p class="card__text">organisateur</p>
+                                 <a class="card__link" href="{{ path('user_detail', {'id': event.organisator.id }) }}"> {{event.organisator.username}}</a>
+                             </div>
+                             <div class="card__number-participant">
+                                 <p class="card__text">inscrits/places {{event.nbMaxInscription}}</p>
+                             </div>
+                         </div>
+                         <div class="card__action">
+
+                             <a class="card__link" href="{{ path('event_detail' , {'id': event.id }) }}">Afficher</a>
+                             {% if orga == '1' %}
+                                 <a class="card__link" href="{{ path('event_update' , {'id': event.id }) }}">Modifier</a>
+                                 <a class="card__link" href="{{ path('event_delete' , {'id': event.id }) }}">Supprimer</a>
+                             {% endif %}
+                         </div>
                      </div>
                      <div class="card__footer">
-                         <div class="card__owner border">
-                             <p class="card__text">organisateur</p>
-                             <a class="card__link" href="{{ path('user_detail', {'id': event.organisator.id }) }}"> {{event.organisator.username}}</a>
-                         </div>
-                         <div class="card__action border">
-                             <p class="card__text">actions</p>
-                             {% if insc == '1' %}
-                                 <a class="card__link" href="{{ path('event_desinscription' , {'id': event.id }) }}">Se désister</a>
-                             {% else %}
-                                 <a class="card__link" href="{{ path('event_inscription' , {'id': event.id }) }}">S'inscrire</a>
-                             {% endif %}
-                             {% if orga == '1' %}
-                                 <a href="{{ path('event_update' , {'id': event.id }) }}">- Modifier</a>
-                                 <a href="{{ path('event_delete' , {'id': event.id }) }}">- Supprimer</a>
-                             {% endif %}
-                             <a href="{{ path('event_detail' , {'id': event.id }) }}">- Afficher</a>
-                         </div>
+                         {% if insc == '1' %}
+                             <a class="card__link" href="{{ path('event_desinscription' , {'id': event.id }) }}">Se désister</a>
+                         {% else %}
+                             <a class="card__link" href="{{ path('event_inscription' , {'id': event.id }) }}">S'inscrire</a>
+                         {% endif %}
                      </div>
-            </div>
+             </div>
          {% else %}
              <p>pas de sorties</p>
          {% endfor %}

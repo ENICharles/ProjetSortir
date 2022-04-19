@@ -110,7 +110,8 @@ class MainController extends AbstractController
                                         $isManager,
                                         $isInscrit,
                                         $isNotInscrit,
-                                        $isPassed);
+                                        $isPassed,
+                                        $usr);
 
         $filter = new Filter();
         $filterForm = $this->createForm(FilterType::class, $filter);
@@ -120,6 +121,9 @@ class MainController extends AbstractController
         {
             return $this->redirectToRoute('main_index');
         }
+      
+        return $this->renderForm('main/index.html.twig',
+            compact( 'filterForm', 'listEvent'));
 
         return $this->renderForm('main/index.html.twig',compact('listCampus','listEvent','filterForm'));
     }

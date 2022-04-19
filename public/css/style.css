@@ -1,13 +1,13 @@
 /* Palettes couleurs
    ========================================================================== */
-/* Color Theme Swatches in Hex */
+/* Color Theme Swatches in Hex*/
 /*.Construction-road-1-hex { color: #FF793B; }*/
 /*.Construction-road-2-hex { color: #2C5A71; }*/
 /*.Construction-road-3-hex { color: #193341; }*/
 /*.Construction-road-4-hex { color: #E4F2FF; }*/
 /*.Construction-road-5-hex { color: #C6D2DE; }*/
 
-/* Squid |Color Theme Swatches in Hex */
+/* Squid |Color Theme Swatches in Hex*/
 /*.Squid-1-hex { color: #1C8394; }*/
 /*.Squid-2-hex { color: #154B52; }*/
 /*.Squid-3-hex { color: #000B0D; }*/
@@ -25,7 +25,10 @@
 
 /* Body
    ========================================================================== */
-body {}
+body {
+    background-color: #171821;
+    color: #f7f7f8;
+}
 
 
 /* Containers
@@ -42,6 +45,8 @@ body {}
 .header {
     grid-column: 1;
     grid-row: 1 / 1;
+    padding: 20px 0;
+    background-color: #13151B;
 }
 .header__container {
     display: flex;
@@ -71,7 +76,11 @@ body {}
     gap: 10px;
     list-style: none;
 }
-.nav__link {}
+.nav__link {
+    text-decoration: none;
+    font-weight: 600;
+    color: #f7f7f8;
+}
 
 
 /* Main
@@ -105,9 +114,6 @@ body {}
 
 /* Main > Card
    ========================================================================== */
-.border {
-     border: 1px solid #80808052;
- }
 
 .main__card {
     display: flex;
@@ -120,25 +126,63 @@ body {}
 .card {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 1fr);
-    /*padding: 20px;*/
+    grid-template-rows: auto;
+    border-radius: 4px;
+    background-color: #31343d;
 }
-.card__header {}
+.card__header { padding: 20px 20px 0 20px; }
+.card__nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #21222d;
+}
 .card__title {
     font-size: 24px;
 }
-.card__state {}
-.card__number-participant {}
-.card__text {}
-.card__main {}
-.card__main img {
-    width: 300px;
+.card__state {
+    font-weight: 600;
+    color: #2CAEEE;
 }
-.card__date {
+.card__text {max-width: 110px;}
+.card__main { padding: 0 20px; }
+.card__date { display: flex; }
+.card__date-days {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
 }
-.card__date-start {}
-.card__date-end {}
+.card__owner a { color: #2CAEEE; }
+.card__owner-participant {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+}
+.card__number-participant p { text-align: end; }
+.card__registered { padding: 10px; }
+.card__link {
+    font-weight: 700;
+    text-decoration: none;
+    color: #f7f7f8;
+}
+.card__action {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px 0;
+    border-top: 1px solid #21222d;
+}
+.card__footer {
+    padding: 20px 20px;
+    border-radius: 0 0 4px 4px;
+    text-align: center;
+    background-color: #2CAEEE;
+}
 
 /* User
    ========================================================================== */
