@@ -99,15 +99,32 @@ body {
 
 /* Main > Form
    ========================================================================== */
-.form__container {}
-.form__fields {}
-.form__label {}
+.form__container {
+    text-align: center;
+}
+.form__fields {
+    display: grid;
+    justify-content: center;
+    margin-top: 47px;
+}
+.form__label {
+    margin-right: 15px;
+}
+.form__check{
+    margin-top: 15px;
+    display: inline-grid;
+}
+.form__link{
+    margin-top: 15px;
+}
 .form__input {}
 .form__checkbox {}
 .form__button {}
+.form__label{}
+
 
 /* Main > Redirect
-   ========================================================================== */
+========================================================================== */
 .redirect {}
 .redirect__text {}
 .redirect__link {}
