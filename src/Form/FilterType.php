@@ -85,22 +85,7 @@ class FilterType extends AbstractType
                     'label' => "Sorties passées "
                 ]
             )
-
         ;
-
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event)
-        {
-            $product = $event->getData();
-            $form = $event->getForm();
-
-            if (!$product || null === $product->getId())
-            {
-                $form->add('name', TextType::class);
-                            dd('test');
-            }
-
-
-        });
     }
 
 
