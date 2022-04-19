@@ -113,7 +113,6 @@ class MainController extends AbstractController
                                         $isPassed);
 
         $filter = new Filter();
-
         $filterForm = $this->createForm(FilterType::class, $filter);
         $filterForm->handleRequest($request);
 
@@ -123,7 +122,6 @@ class MainController extends AbstractController
         }
 
         return $this->renderForm('main/index.html.twig',compact('listCampus','listEvent','filterForm'));
-
     }
 }
 
