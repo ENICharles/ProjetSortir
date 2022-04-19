@@ -5,6 +5,9 @@ namespace App\Form;
 use App\Entity\City;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\ChoiceList;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,14 +27,14 @@ class CityType extends AbstractType
                         new NotBlank(['message' => 'Merci de saisir un nom'])
                     ]
                 ])
-            ->add('postcode',TextType::class,
+            ->add('postcode',null,
                 [
-                    'required' => true,
+//                    'required' => true,
                     'label' => 'Code postal : ',
-                    'constraints' =>
-                        [
-                            new NotBlank(['message' => 'Merci de saisir un code postal'])
-                        ]
+//                    'constraints' =>
+//                        [
+//                            new NotBlank(['message' => 'Merci de saisir un code postal'])
+//                        ]
                 ])
         ;
     }
