@@ -47,7 +47,7 @@ class MainController extends AbstractController
         Request  $request): Response
     {
         $filter = new Filter();
-        $filterRepository->findOneBy(['campus' => $this->getUser()->getUserIdentifier()]);
+//        $filterRepository->findOneBy(['campus' => $this->getUser()->getUserIdentifier()]);
 //        $user = $userRepository->findOneBy(['campus' => $this->getUser()->getUserIdentifier()]);
         $filterForm = $this->createForm(FilterType::class, $filter);
         $filterForm->handleRequest($request);
@@ -209,8 +209,10 @@ class MainController extends AbstractController
 //            $listEvent = $newArray;
 //        }
 
+        $listEvent = $er->findAll();
+
         return $this->renderForm('main/index.html.twig',
-            compact( 'filterForm'));
+            compact( 'filterForm', 'listEvent'));
 //            compact('listCampus','listEvent', 'filterForm'));
     }
 }
