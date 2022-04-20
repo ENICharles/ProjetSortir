@@ -157,7 +157,7 @@ class EventController extends AbstractController
 
         /* Ajout l'évènement de l'utilisateur */
         $usr->addEvent($ev);
-
+        $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
         $em->persist($usr);
         $em->flush();
 
@@ -173,7 +173,7 @@ class EventController extends AbstractController
 
         /* supprime l'évènement de l'utilisateur */
         $usr->removeEvent($ev);
-
+        $ev->setNbMaxInscription($ev->getNbMaxInscription()+1);
         $em->persist($usr);
         $em->flush();
 

@@ -19,11 +19,26 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('firstname')
-            ->add('username')
-            ->add('phone')
-            ->add('email')
+            ->add('name',null,[
+                'label'=>'Nom'
+            ]
+        )
+            ->add('firstname',null,[
+                    'label'=>'Prénom'
+                ]
+            )
+            ->add('username',null,[
+                    'label'=>'Pseudo'
+                ]
+            )
+            ->add('phone',null,[
+                    'label'=>'Téléphone'
+                ]
+            )
+            ->add('email',null,[
+                    'label'=>'Email'
+                ]
+            )
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -43,6 +58,7 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('campus',EntityType::class,[
                 'class'=>Campus::class,
+                'label'=>'Campus',
                 'choice_label'=>'name'
             ])
         ;

@@ -30,6 +30,7 @@ class FilterType extends AbstractType
                     'choice_label' => 'name',
                     'label_attr' => ['class' => 'form__label'],
                     'attr' => ["class" => "form__field"]
+
                 ]
             )
 
@@ -45,14 +46,14 @@ class FilterType extends AbstractType
                 DateTimeType::class,
                 [
                     'label' => 'Entre ',
-                    'html5' => true,
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s',
+
                     'attr' => ["class" => "form__field"],
-                    'required'=>false,
+                    'data' => new \DateTime("now")
                 ]
             )
-            ->add('inscriptionDateLimit',
+            ->add('dateEnd',
                 DateTimeType::class,
                 [
                     "label" => 'Et ',
@@ -60,6 +61,7 @@ class FilterType extends AbstractType
                     'input_format' => 'd-m-Y H:i:s',
                     'attr' => ["class" => "form__field"],
                     'required'=>false
+                    'data' => (new \DateTime("now"))->modify('+1 day')
                 ]
             )
 
@@ -76,6 +78,7 @@ class FilterType extends AbstractType
                 [
                     'label' => "Sorties auxquelles je suis inscrit/e",
                     'attr' => ["class" => "form__field"]
+                    'required' => false,
                 ]
 
             )
@@ -84,6 +87,7 @@ class FilterType extends AbstractType
                 [
                     'label' => "Sorties auxquelles je ne suis pas inscrit/e",
                     'attr' => ["class" => "form__field"]
+                    'required' => false,
                 ]
             )
             ->add('isPassedEvent',
@@ -91,6 +95,7 @@ class FilterType extends AbstractType
                 [
                     'label' => "Sorties passées ",
                     'attr' => ["class" => "form__field"]
+                    'required' => false,
                 ]
             )
         ;
