@@ -177,17 +177,18 @@ class EventRepository extends ServiceEntityRepository
             $rq->andWhere('e.state     = :state');
         }
 
-        $rq->setParameter('state',  $state);
+        $rq->setParameter('state', $state);
 
+        dump($campus);
         $rq->andWhere('e.campus = :cp');
-        $rq->setParameter('cp',     $campus);
+        $rq->setParameter('cp', $campus);
 
         $rq->andWhere('e.dateStart >= :debut');
         $rq->andWhere('e.dateStart <= :fin');
         $rq->setParameter('debut', $debut);
         $rq->setParameter('fin', $fin);
 
-        if($motClef != null)
+        if(($motClef != null) && ($motClef != ' '))
         {
             $rq->andWhere('e.name LIKE :mc');
             $rq->setParameter('mc', '%' . $motClef . '%');
@@ -201,7 +202,6 @@ class EventRepository extends ServiceEntityRepository
 
         if(($inscrit == true) && ($notInscrit == false))
         {
-            dump('ici');
             $rq->andWhere(':ins MEMBER OF e.users');
             $rq->setParameter('ins', $user);
         }

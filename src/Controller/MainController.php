@@ -89,6 +89,9 @@ class MainController extends AbstractController
                 $filter->setName(' ');
             }
 
+            /* récupération du campus de l'utilisateur */
+            $selectedCampus = $filter->getCampus();
+
             $listEvent = $er->findbyFilter( $selectedCampus,
                                             $filter->getDateStart(),
                                             $filter->getDateEnd(),
@@ -99,15 +102,10 @@ class MainController extends AbstractController
                                             $filter->getIsPassedEvent(),
                                             $usr);
 
-            dump($listEvent);
-//            return $this->redirectToRoute('main_search');
             return $this->renderForm('main/index.html.twig',compact( 'filterForm', 'listEvent'));
         }
 
-        dump($listEvent);
         return $this->renderForm('main/index.html.twig',compact( 'filterForm', 'listEvent'));
-
-//        return $this->renderForm('main/index.html.twig',compact('listCampus','listEvent','filterForm'));
     }
 }
 
