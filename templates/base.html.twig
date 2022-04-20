@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Andada+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Andada+Pro&display=swap" rel="stylesheet">
         <script src="{{ asset('js/script.js') }}"></script>
 
     </head>
@@ -29,7 +29,7 @@
                         <nav class="nav">
                             <ul class="nav__list">
                                 <li class="nav__item">
-                                    <a class="nav__link" href="{{ path('user_profil') }}">Mon Profil</a>
+                                    <a href="{{ path('user_profil') }}">Mon Profil</a>
                                 </li>
                                 <li class="nav__item">
                                     <a class="nav__link" href="{{ path('app_logout') }}">Se déconnecter</a>

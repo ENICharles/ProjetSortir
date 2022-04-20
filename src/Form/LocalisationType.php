@@ -23,8 +23,9 @@ class LocalisationType extends AbstractType
                 ]
             )
 
-            ->add('name', null,[
-                'label'=>'Nom du lieu'
+            ->add('name', TextType::class,[
+                'label'=>'Nom du lieu',
+                'attr'=>['onkeypress'=>'getDataLocalisation()']
 
             ])
             ->add('street', null,[
