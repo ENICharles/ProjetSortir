@@ -13,7 +13,7 @@ class Filter
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\OneToOne(targetEntity: Campus::class, cascade: ['persist', 'remove'])]
     private $campus;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -23,7 +23,7 @@ class Filter
     private $dateStart;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $inscriptionDateLimit;
+    private $dateEnd;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $isOrganisator;
@@ -43,15 +43,14 @@ class Filter
         return $this->id;
     }
 
-    public function getCampus(): ?string
+    public function getCampus(): ?Campus
     {
         return $this->campus;
     }
 
-    public function setCampus(string $campus): self
+    public function setCampus(?Campus $campus): self
     {
         $this->campus = $campus;
-
         return $this;
     }
 
@@ -75,19 +74,6 @@ class Filter
     public function setDateStart(\DateTimeInterface $dateStart): self
     {
         $this->dateStart = $dateStart;
-
-        return $this;
-    }
-
-    public function getInscriptionDateLimit(): ?\DateTimeInterface
-    {
-        return $this->inscriptionDateLimit;
-    }
-
-    public function setInscriptionDateLimit(\DateTimeInterface $inscriptionDateLimit): self
-    {
-        $this->inscriptionDateLimit = $inscriptionDateLimit;
-
         return $this;
     }
 
@@ -136,6 +122,16 @@ class Filter
     {
         $this->isPassedEvent = $isPassedEvent;
 
+        return $this;
+    }
+
+    public function getDateEnd(): ?\DateTimeInterface
+    {
+        return $this->dateEnd;
+    }
+    public function setDateEnd(?\DateTimeInterface $dateEnd): self
+    {
+        $this->dateEnd = $dateEnd;
         return $this;
     }
 }

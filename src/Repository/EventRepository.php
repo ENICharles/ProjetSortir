@@ -149,14 +149,17 @@ class EventRepository extends ServiceEntityRepository
      * @return float|int|mixed|string
      */
     public function findbyFilter(Campus   $campus,
-                                 DateTime $debut,
-                                 DateTime $fin,
-                                 string   $motClef      = null,
-                                 User     $isManager    = null,
-                                 User     $inscrit      = null,
-                                 User     $notInscrit   = null,
-                                 bool     $older        = false)
+                                 \DateTimeInterface $debut,
+                                 \DateTimeInterface $fin,
+                                 string   $motClef      ,
+                                 bool     $isManager    ,
+                                 bool     $inscrit      ,
+                                 bool     $notInscrit   ,
+                                 bool     $older        ,
+                                 User     $user)
     {
+
+
         /* recherche de l'état passée */
         $state = ($this->getEntityManager()->getRepository(State::class))->findOneBy(['id'=>'5']);
 
@@ -165,7 +168,7 @@ class EventRepository extends ServiceEntityRepository
         $rq->andWhere('e.dateStart >= :limite');
         $rq->setParameter('limite', (new DateTime())->modify('-1 month'));
 
-        if($older == false)
+        if(!$older)
         {
             $rq->andWhere('e.state     != :state');
         }
@@ -190,28 +193,29 @@ class EventRepository extends ServiceEntityRepository
             $rq->setParameter('mc', '%' . $motClef . '%');
         }
 
-        if($isManager != null)
+        if($isManager == true)
         {
             $rq->andWhere('e.organisator = :mng');
-            $rq->setParameter('mng', $isManager);
+            $rq->setParameter('mng', $user);
         }
 
-        if(($inscrit != null) && ($notInscrit = null))
+        if(($inscrit == true) && ($notInscrit == false))
         {
+            dump('ici');
             $rq->andWhere(':ins MEMBER OF e.users');
-            $rq->setParameter('ins', $inscrit);
+            $rq->setParameter('ins', $user);
         }
-        elseif(($inscrit = null) && ($notInscrit != null))
+        elseif(($inscrit == false) && ($notInscrit == true))
         {
             $rq->andWhere(':noins NOT MEMBER OF e.users');
-            $rq->setParameter('noins', $notInscrit);
+            $rq->setParameter('noins', $user);
         }
-        elseif(($inscrit != null) && ($notInscrit != null))
+        elseif(($inscrit == true) && ($notInscrit == true))
         {
             $rq->andWhere(':ins MEMBER OF e.users');
-            $rq->setParameter('ins', $inscrit);
+            $rq->setParameter('ins', $user);
             $rq->orWhere(':noins NOT MEMBER OF e.users');
-            $rq->setParameter('noins', $notInscrit);
+            $rq->setParameter('noins', $user);
         }
 
         return $rq->orderBy('e.dateStart', 'ASC')->getQuery()->getResult();
