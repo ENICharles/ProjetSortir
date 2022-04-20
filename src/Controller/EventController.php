@@ -28,19 +28,18 @@ class EventController extends AbstractController
      * @param StateRepository $st
      * @return Response
      */
-    #[Route('/create/{id}', name: '_create',requirements: ["id" => "\d+"])]
+    #[Route('/create', name: '_create')]
     public function create(
     Request $request,
     EntityManagerInterface $entityManager,
     UserRepository $userRepository,
     StateRepository $st,
-    LocalisationRepository $localisationRepository,
-    User $user
+    LocalisationRepository $localisationRepository
     ): Response
     {
         $etat= $st->findOneBy(['id'=> 1]);
 
-        $user->getId();
+        $user = $userRepository->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         $event = new Event();
         $event->setOrganisator($user);
@@ -54,17 +53,16 @@ class EventController extends AbstractController
 
         $eventForm->handleRequest($request);
 
-        if ($eventForm->isSubmitted() && $eventForm->isValid()){
-
+        if ($eventForm->isSubmitted() && $eventForm->isValid())
+        {
             $entityManager->persist($local);
             $entityManager->persist($event);
 
             $entityManager->flush();
             return $this->redirectToRoute('main_index');
         }
-        return $this->renderForm('event/update.html.twig',
-            compact('eventForm'));
 
+        return $this->renderForm('event/update.html.twig',compact('eventForm'));
     }
 
     /**
