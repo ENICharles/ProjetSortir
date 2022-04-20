@@ -56,11 +56,10 @@ class FilterType extends AbstractType
             ->add('dateEnd',
                 DateTimeType::class,
                 [
+                    'required'=>false,
                     "label" => 'Et ',
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s',
-                    'attr' => ["class" => "form__field"],
-                    'required'=>false
                     'data' => (new \DateTime("now"))->modify('+1 day')
                 ]
             )
@@ -73,20 +72,21 @@ class FilterType extends AbstractType
                     'required' => false,
                 ]
             )
+
             ->add('isRegistered',
                     CheckboxType::class,
                 [
                     'label' => "Sorties auxquelles je suis inscrit/e",
-                    'attr' => ["class" => "form__field"]
+                    'attr' => ["class" => "form__field"],
                     'required' => false,
                 ]
-
             )
+
             ->add('isNotRegistered',
                 CheckboxType::class,
                 [
                     'label' => "Sorties auxquelles je ne suis pas inscrit/e",
-                    'attr' => ["class" => "form__field"]
+                    'attr' => ["class" => "form__field"],
                     'required' => false,
                 ]
             )
@@ -94,8 +94,8 @@ class FilterType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => "Sorties passées ",
-                    'attr' => ["class" => "form__field"]
-                    'required' => false,
+                    'attr' => ["class" => "form__field"],
+                    'required' => false
                 ]
             )
         ;
