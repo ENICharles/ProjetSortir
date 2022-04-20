@@ -28,61 +28,69 @@ class FilterType extends AbstractType
                 [
                     'class' => Campus::class,
                     'choice_label' => 'name',
+                    'label_attr' => ['class' => 'form__label'],
+                    'attr' => ["class" => "form__field"]
                 ]
             )
 
             ->add('name',
                 TextType::class,
                 [
-                    'required'=>false,
-                    'label' => 'Nom de la sortie '
+                    'label' => 'Nom de la sortie ',
+                    'attr' => ["class" => "form__field"],
+                    'required'=>false
                 ]
             )
             ->add('dateStart',
                 DateTimeType::class,
                 [
-                    'required'=>false,
                     'label' => 'Entre ',
                     'html5' => true,
                     'widget' => 'single_text',
-                    'input_format' => 'd-m-Y H:i:s'
-
+                    'input_format' => 'd-m-Y H:i:s',
+                    'attr' => ["class" => "form__field"],
+                    'required'=>false,
                 ]
             )
             ->add('inscriptionDateLimit',
                 DateTimeType::class,
                 [
-                    'required'=>false,
                     "label" => 'Et ',
                     'widget' => 'single_text',
-                    'input_format' => 'd-m-Y H:i:s'
+                    'input_format' => 'd-m-Y H:i:s',
+                    'attr' => ["class" => "form__field"],
+                    'required'=>false
                 ]
             )
 
             ->add( 'isOrganisator',
                 CheckboxType::class,
                 [
+                    'label' => "Sorties dont je suis l'organisateur",
+                    'attr' => ["class" => "form__field"],
                     'required' => false,
-                    'label' => "Sorties dont je suis l\'organisateur"
                 ]
             )
             ->add('isRegistered',
                     CheckboxType::class,
                 [
-                    'label' => "Sorties auxquelles je suis inscrit/e"
+                    'label' => "Sorties auxquelles je suis inscrit/e",
+                    'attr' => ["class" => "form__field"]
                 ]
 
             )
             ->add('isNotRegistered',
                 CheckboxType::class,
                 [
-                    'label' => "Sorties auxquelles je ne suis pas inscrit/e"
+                    'label' => "Sorties auxquelles je ne suis pas inscrit/e",
+                    'attr' => ["class" => "form__field"]
                 ]
             )
             ->add('isPassedEvent',
                 CheckboxType::class,
                 [
-                    'label' => "Sorties passées "
+                    'label' => "Sorties passées ",
+                    'attr' => ["class" => "form__field"]
                 ]
             )
         ;

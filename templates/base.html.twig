@@ -26,8 +26,14 @@
                         </a>
                     </div>
                     {% if app.user %}
-                        <nav class="nav">
+                        <nav>
+                            <label class="nav_menu" href="#">
+                                <i class="fa-solid fa-bars"></i>
+                            </label>
                             <ul class="nav__list">
+                                <li class="nav__item">
+                                    <a class="nav__link" href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>
+                                </li>
                                 <li class="nav__item">
                                     <a class="nav__link" href="{{ path('user_profil') }}">Mon Profil</a>
                                 </li>
@@ -60,6 +66,7 @@
             <main class="main">
                 {% block body %}
                 {% endblock %}
+
                 {% block event %}
                 {% endblock %}
             </main>

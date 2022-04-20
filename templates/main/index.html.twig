@@ -6,16 +6,23 @@
 
 {% block body %}
 
-    {{ form_start(filterForm) }}
-    {{ form_widget(filterForm) }}
-    <button>Rechercher</button>
-    {{ form_end(filterForm) }}
-{# TODO mis en forme bouton créer une sortie#}
-    <a class="main__create" href="{{ path('event_create',{'id': app.user.id}) }}">Créer une sortie</a>
 
+        <div class="form__container">
+            {{ form_start(filterForm) }}
+            {{ form_errors(filterForm) }}
+            {{ form_widget(filterForm) }}
+            <small>
+                {{ form_help(filterForm) }}
+            </small>
+            <div>
+                <button class="form__button">Rechercher</button>
+            </div>
+
+        </div>
+        {{ form_end(filterForm) }}
 {% endblock %}
 
- {% block event %}
+{% block event %}
      <div class="main__card">
          {% for event in listEvent %}
              <div class="card">
@@ -34,7 +41,6 @@
                              <h4 class="card__title">
                                  {{ event.name }}
                              </h4>
-
                              <p class="card__state">
                                  {{event.state.label}}
                              </p>
@@ -53,7 +59,7 @@
                              <div class="card__registered">
                                  <p class="card__text">inscrit</p>
                                  {% if insc == '1' %}
-                                     x
+                                     <i class="fa-regular fa-circle-check"></i>
                                  {% endif %}
                              </div>
                          </div>
@@ -83,14 +89,12 @@
                              {% endif %}
                          </div>
                      </div>
-
                      {% if insc == '1' %}
                          <a class="card__link" href="{{ path('event_desinscription' , {'id': event.id }) }}">
                              <div class="card__footer desinscription">
                                  <p>Se désister</p>
                              </div>
                          </a>
-
                      {% else %}
                          <a class="card__link" href="{{ path('event_inscription' , {'id': event.id }) }}">
                              <div class="card__footer inscription">
@@ -98,7 +102,6 @@
                              </div>
                          </a>
                          {% endif %}
-
              </div>
          {% else %}
              <p>pas de sorties</p>
