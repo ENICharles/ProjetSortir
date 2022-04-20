@@ -28,21 +28,23 @@ class EventController extends AbstractController
      * @param StateRepository $st
      * @return Response
      */
-    #[Route('/create', name: '_create')]
+    #[Route('/create/{id}', name: '_create',requirements: ["id" => "\d+"])]
     public function create(
     Request $request,
     EntityManagerInterface $entityManager,
     UserRepository $userRepository,
     StateRepository $st,
-    LocalisationRepository $localisationRepository
+    LocalisationRepository $localisationRepository,
+    User $user
     ): Response
     {
         $etat= $st->findOneBy(['id'=> 1]);
 
-        $user = $userRepository->findOneBy(['id'=>$this->getUser()->getUserIdentifier()]);
+        $user->getId();
 
         $event = new Event();
         $event->setOrganisator($user);
+
         $local = $localisationRepository->findOneBy(['id'=> 1]);
         $event->setLocalisation($local);
         $local->addEvent($event);
@@ -156,10 +158,13 @@ class EventController extends AbstractController
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* Ajout l'évènement de l'utilisateur */
-        $usr->addEvent($ev);
-        $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
-        $em->persist($usr);
-        $em->flush();
+        if($ev->getInscriptionDateLimit() >= new \DateTime('now'))
+        {
+            $usr->addEvent($ev);
+            $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
+            $em->persist($usr);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('main_index');
     }
@@ -172,10 +177,13 @@ class EventController extends AbstractController
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* supprime l'évènement de l'utilisateur */
-        $usr->removeEvent($ev);
-        $ev->setNbMaxInscription($ev->getNbMaxInscription()+1);
-        $em->persist($usr);
-        $em->flush();
+        if($ev->getInscriptionDateLimit() > (new \DateTime()))
+        {
+            $usr->removeEvent($ev);
+            $ev->setNbMaxInscription($ev->getNbMaxInscription() + 1);
+            $em->persist($usr);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('main_index');
     }
