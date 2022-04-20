@@ -48,7 +48,6 @@ class FilterType extends AbstractType
                     'label' => 'Entre ',
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s',
-
                     'attr' => ["class" => "form__field"],
                     'data' => new \DateTime("now")
                 ]
