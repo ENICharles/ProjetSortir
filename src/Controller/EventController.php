@@ -39,10 +39,9 @@ class EventController extends AbstractController
     ): Response
     {
         $etat= $st->findOneBy(['id'=> 1]);
-        dump($etat);
-//        $user = $userRepository->findOneBy(['id'=>$this->getUser()->getUserIdentifier()]);
+
         $user->getId();
-        dump($user);
+
         $event = new Event();
         $event->setOrganisator($user);
 
@@ -159,10 +158,13 @@ class EventController extends AbstractController
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* Ajout l'évènement de l'utilisateur */
-        $usr->addEvent($ev);
-        $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
-        $em->persist($usr);
-        $em->flush();
+        if($ev->getInscriptionDateLimit() >= new \DateTime('now'))
+        {
+            $usr->addEvent($ev);
+            $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
+            $em->persist($usr);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('main_index');
     }
@@ -175,10 +177,13 @@ class EventController extends AbstractController
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* supprime l'évènement de l'utilisateur */
-        $usr->removeEvent($ev);
-        $ev->setNbMaxInscription($ev->getNbMaxInscription()+1);
-        $em->persist($usr);
-        $em->flush();
+        if($ev->getInscriptionDateLimit() > (new \DateTime()))
+        {
+            $usr->removeEvent($ev);
+            $ev->setNbMaxInscription($ev->getNbMaxInscription() + 1);
+            $em->persist($usr);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('main_index');
     }
