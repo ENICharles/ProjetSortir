@@ -28,6 +28,7 @@ class FilterType extends AbstractType
                 [
                     'class' => Campus::class,
                     'choice_label' => 'name',
+                    'attr'=>['name'=>'campus']
                 ]
             )
 
@@ -43,19 +44,21 @@ class FilterType extends AbstractType
                 [
                     'required'=>false,
                     'label' => 'Entre ',
-                    'html5' => true,
+//                    'html5' => true,
                     'widget' => 'single_text',
-                    'input_format' => 'd-m-Y H:i:s'
+                    'input_format' => 'd-m-Y H:i:s',
+                    'data' => new \DateTime("now")
 
                 ]
             )
-            ->add('inscriptionDateLimit',
+            ->add('dateEnd',
                 DateTimeType::class,
                 [
                     'required'=>false,
                     "label" => 'Et ',
                     'widget' => 'single_text',
-                    'input_format' => 'd-m-Y H:i:s'
+                    'input_format' => 'd-m-Y H:i:s',
+                    'data' => (new \DateTime("now"))->modify('+1 day')
                 ]
             )
 
@@ -69,20 +72,23 @@ class FilterType extends AbstractType
             ->add('isRegistered',
                     CheckboxType::class,
                 [
-                    'label' => "Sorties auxquelles je suis inscrit/e"
+                    'label' => "Sorties auxquelles je suis inscrit/e",
+                    'required' => false,
                 ]
 
             )
             ->add('isNotRegistered',
                 CheckboxType::class,
                 [
-                    'label' => "Sorties auxquelles je ne suis pas inscrit/e"
+                    'label' => "Sorties auxquelles je ne suis pas inscrit/e",
+                    'required' => false,
                 ]
             )
             ->add('isPassedEvent',
                 CheckboxType::class,
                 [
-                    'label' => "Sorties passées "
+                    'label' => "Sorties passées ",
+                    'required' => false,
                 ]
             )
 
