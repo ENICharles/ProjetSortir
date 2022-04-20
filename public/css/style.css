@@ -15,13 +15,37 @@
 /*.Squid-5-hex { color: #A52502; }*/
 
 
+/* Media queries
+   ========================================================================== */
+
+@media (min-width: 320px) {
+
+    nav label {
+        display: block;
+        font-size: 24px;
+        text-align: end;
+    }
+
+    nav a { display: none;}
+}
+
+@media (min-width: 720px) {
+
+    nav label { display: none;}
+    nav a { display: block;}
+}
+
+@media (min-width: 720px) {
+
+    nav label { display: none;}
+    nav a { display: block;}
+}
 
 /* All
    ========================================================================== */
 * {
     font-family: 'Andada Pro', sans-serif;
 }
-
 
 /* Body
    ========================================================================== */
@@ -31,7 +55,7 @@ body {
 }
 
 
-/* Containers
+/* Container
    ========================================================================== */
 .container {
     display: grid;
@@ -66,7 +90,7 @@ body {
 
 /* Header > Nav
    ========================================================================== */
-.nav {}
+
 .nav__list {
     display: flex;
     gap: 40px;
@@ -82,46 +106,73 @@ body {
     color: #f7f7f8;
 }
 
-
 /* Main
    ========================================================================== */
 .main {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
     grid-column: 1;
     grid-row: 2 / 2;
+    padding: 40px 0;
 }
 
-/* Main > Login
-   ========================================================================== */
-.login {}
-.login__title {}
-.login__form {}
-.login__alert {}
+.main__card {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    grid-column: 1 / 1;
+    grid-row: 3 /3;
+}
 
 /* Main > Form
    ========================================================================== */
-.form__container {
-    text-align: center;
-}
-.form__fields {
-    display: grid;
-    justify-content: center;
-    margin-top: 47px;
-}
-.form__label {
-    margin-right: 15px;
-}
-.form__check{
-    margin-top: 15px;
-    display: inline-grid;
-}
-.form__link{
-    margin-top: 15px;
-}
-.form__input {}
-.form__checkbox {}
-.form__button {}
-.form__label{}
 
+.form__container {
+    display: flex;
+    justify-content: center;
+}
+#filter {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.form__container form {
+    margin: 20px 0;
+    padding: 20px 42px;
+    border-radius: 4px;
+    font-weight: 700;
+    background-color: #f0f1f3;
+    color: #171821;
+}
+.form__container div {
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.form__field {
+    height: 26px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.form__button {
+    width: 320px;
+    margin: 40px auto;
+    padding: 17px 10px;
+    align-items: center;
+    justify-self: center;
+    border-style: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #2CAEEE;
+    color: #171821;
+}
 
 /* Main > Redirect
 ========================================================================== */
@@ -131,15 +182,6 @@ body {
 
 /* Main > Card
    ========================================================================== */
-
-.main__card {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 40px;
-
-}
-
 .card {
     display: grid;
     grid-template-columns: 1fr;
@@ -185,9 +227,19 @@ body {
 }
 .card__number-participant p { text-align: end; }
 .card__registered {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     text-align: end;
     padding: 10px 0;
 }
+
+.fa-regular {
+    font-size: 21px;
+    font-weight: 600;
+}
+
 .card__link {
     font-weight: 700;
     text-decoration: none;
@@ -212,6 +264,8 @@ body {
 .desinscription {
     background-color: #ED786B;
 }
+
+
 
 /* User
    ========================================================================== */
@@ -266,16 +320,4 @@ margin-top: 15px;
 }
 .detail_lien{
     margin-top: 45px;
-}
-/* Event
-   ========================================================================== */
-
-/* Event_create
-   ========================================================================== */
-
-/* Footer
-   ========================================================================== */
-.footer {
-    grid-column: 1;
-    grid-row: 3 / 3;
 }

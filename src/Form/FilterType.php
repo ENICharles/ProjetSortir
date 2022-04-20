@@ -28,15 +28,17 @@ class FilterType extends AbstractType
                 [
                     'class' => Campus::class,
                     'choice_label' => 'name',
-                    'attr'=>['name'=>'campus']
+                    'label_attr' => ['class' => 'form__label'],
+                    'attr' => ["class" => "form__field"]
                 ]
             )
 
             ->add('name',
                 TextType::class,
                 [
-                    'required'=>false,
-                    'label' => 'Nom de la sortie '
+                    'label' => 'Nom de la sortie ',
+                    'attr' => ["class" => "form__field"],
+                    'required'=>false
                 ]
             )
             ->add('dateStart',
@@ -44,11 +46,10 @@ class FilterType extends AbstractType
                 [
                     'required'=>true,
                     'label' => 'Entre ',
-//                    'html5' => true,
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s',
+                    'attr' => ["class" => "form__field"],
                     'data' => new \DateTime("now")
-
                 ]
             )
             ->add('dateEnd',
@@ -58,6 +59,7 @@ class FilterType extends AbstractType
                     "label" => 'Et ',
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s',
+                    'attr' => ["class" => "form__field"],
                     'data' => (new \DateTime("now"))->modify('+1 day')
                 ]
             )
@@ -65,15 +67,17 @@ class FilterType extends AbstractType
             ->add( 'isOrganisator',
                 CheckboxType::class,
                 [
-                    'required' => false,
-                    'label' => "Sorties dont je suis l\'organisateur"
+                    'label' => "Sorties dont je suis l'organisateur",
+                    'attr' => ["class" => "form__field"],
+                    'required' => false
                 ]
             )
             ->add('isRegistered',
-                    CheckboxType::class,
+                CheckboxType::class,
                 [
                     'label' => "Sorties auxquelles je suis inscrit/e",
-                    'required' => false,
+                    'attr' => ["class" => "form__field"],
+                    'required' => false
                 ]
 
             )
@@ -81,14 +85,16 @@ class FilterType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => "Sorties auxquelles je ne suis pas inscrit/e",
-                    'required' => false,
+                    'attr' => ["class" => "form__field"],
+                    'required' => false
                 ]
             )
             ->add('isPassedEvent',
                 CheckboxType::class,
                 [
                     'label' => "Sorties passées ",
-                    'required' => false,
+                    'attr' => ["class" => "form__field"],
+                    'required' => false
                 ]
             )
         ;
