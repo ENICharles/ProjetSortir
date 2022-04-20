@@ -42,7 +42,7 @@ class FilterType extends AbstractType
             ->add('dateStart',
                 DateTimeType::class,
                 [
-                    'required'=>false,
+                    'required'=>true,
                     'label' => 'Entre ',
 //                    'html5' => true,
                     'widget' => 'single_text',
@@ -54,7 +54,7 @@ class FilterType extends AbstractType
             ->add('dateEnd',
                 DateTimeType::class,
                 [
-                    'required'=>false,
+                    'required'=>true,
                     "label" => 'Et ',
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s',
