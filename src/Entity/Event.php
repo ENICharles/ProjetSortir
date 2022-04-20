@@ -57,7 +57,7 @@ class Event
     #[ORM\JoinColumn(nullable: false)]
     private $organisator;
 
-    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'event')]
+    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
     private $campus;
 

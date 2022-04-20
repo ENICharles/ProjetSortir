@@ -6,25 +6,25 @@
 
 {% block body %}
     <div class="register">
-        <h2 class="register__title">Créer un compte pour Sortir.com</h2>
-        <!--temporaire-->
-        <small>register</small>
-        <!--fin temporaire-->
+        <h2 class="register__title">Création d'un compte pour Sortir.com</h2>
+
         <div class="register__form">
             {{ form_start(registrationForm) }}
             {{ form_row(registrationForm.name) }}
             {{ form_row(registrationForm.firstname) }}
+            {{ form_row(registrationForm.username) }}
             {{ form_row(registrationForm.phone) }}
             {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.campus) }}
             {{ form_row(registrationForm.plainPassword, {
-                label: 'Password'
+                label: 'Mot de passe'
             }) }}
             <button class="btn" type="submit">S'inscrire</button>
             {{ form_end(registrationForm) }}
         </div>
-        <div class="redirect">
-            <p class="redirect__text">J'ai déjà un compte</p>
-            <a class="redirect__link" href="{{ path('app_login') }}">Se connecter</a>
-        </div>
+{#        <div class="redirect">#}
+{#            <p class="redirect__text">J'ai déjà un compte</p>#}
+{#            <a class="redirect__link" href="{{ path('app_login') }}">Se connecter</a>#}
+{#        </div>#}
     </div>
 {% endblock %}
