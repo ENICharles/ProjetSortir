@@ -20,6 +20,21 @@
 
 @media (min-width: 320px) {
 
+    .main {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+    .form__container {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .main__card {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
     nav label {
         display: block;
         font-size: 24px;
@@ -29,13 +44,25 @@
     nav a { display: none;}
 }
 
-@media (min-width: 720px) {
+@media (min-width: 860px) {
 
-    nav label { display: none;}
-    nav a { display: block;}
-}
+    .main {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+    }
 
-@media (min-width: 720px) {
+    .form__container {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .form__container form { position : fixed;}
+
+    .main__card {
+        grid-column: 2;
+        grid-row: 1;
+    }
 
     nav label { display: none;}
     nav a { display: block;}
@@ -109,9 +136,9 @@ body {
 /* Main
    ========================================================================== */
 .main {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
+/*    display: grid;*/
+/*    grid-template-columns: 1fr;*/
+/*    grid-template-rows: auto;*/
     grid-column: 1;
     grid-row: 2 / 2;
     padding: 40px 0;
@@ -122,8 +149,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 40px;
-    grid-column: 1 / 1;
-    grid-row: 3 /3;
+    margin: 20px 0;
 }
 
 /* Main > Form
@@ -219,6 +245,7 @@ body {
     padding: 10px 0;
 }
 .card__owner a { color: #2CAEEE; }
+
 .card__owner-participant {
     display: flex;
     flex-direction: row;
@@ -226,6 +253,7 @@ body {
     padding: 10px 0;
 }
 .card__number-participant p { text-align: end; }
+
 .card__registered {
     display: flex;
     flex-direction: column;
