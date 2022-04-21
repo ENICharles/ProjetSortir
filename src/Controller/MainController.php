@@ -9,6 +9,7 @@ use App\Form\FilterType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
 use App\Repository\FilterRepository;
+use App\Repository\StateRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,11 +54,15 @@ class MainController extends AbstractController
         CampusRepository $cr,
         EventRepository $er,
         FilterRepository $filterRepository,
-        Request  $request
+        Request  $request,
+        StateRepository $st
     ): Response
     {
         /* recherche tous les campus */
         $listCampus     = $cr->findAll();
+
+        /* recherche tous les campus */
+        $listState    = $st->findAll();
 
         /* récupération de l'utilisateur */
         $usr            = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
@@ -105,7 +110,7 @@ class MainController extends AbstractController
             return $this->renderForm('main/index.html.twig',compact( 'filterForm', 'listEvent'));
         }
 
-        return $this->renderForm('main/index.html.twig',compact( 'filterForm', 'listEvent'));
+        return $this->renderForm('main/index.html.twig',compact( 'filterForm', 'listEvent','listState'));
     }
 }
 
