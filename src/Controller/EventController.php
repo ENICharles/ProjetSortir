@@ -8,6 +8,7 @@ use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
+use App\services\Mailing;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -179,6 +180,36 @@ class EventController extends AbstractController
         {
             $usr->removeEvent($ev);
             $ev->setNbMaxInscription($ev->getNbMaxInscription() + 1);
+            $em->persist($usr);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('main_index');
+    }
+
+    #[Route('/annulation/{id}', name: '_annulation')]
+    public function annulation(EntityManagerInterface $em,
+                               UserRepository $ur,
+                               CampusRepository $cr,
+                               EventRepository $er,
+                               StateRepository $sr,
+                               Request  $request,
+                               Event $ev,
+                               Mailing $mailing
+    ): Response
+    {
+        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+
+        /* annule l'évènement */
+        if($ev->getInscriptionDateLimit() > (new \DateTime()))
+        {
+            /* modification de l'évènement */
+            $ev->setState($sr->findOneBy(['id'=>6]));
+            $ev->setNbMaxInscription(0);
+            $mailing->sendToAllUserEvent(
+                $ev,
+                "Annulation de l'évènement ". $ev->getName(),
+                "L'évènement ". $ev->getName() ." est annulé");
             $em->persist($usr);
             $em->flush();
         }

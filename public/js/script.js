@@ -37,7 +37,6 @@ function getDataLocalisation(id)
     });
 }
 
-
 function show(){
     getDataLocalisation(document.getElementById('event_localisation').value);
 }
