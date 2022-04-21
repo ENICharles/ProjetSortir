@@ -39,7 +39,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
-    #[Assert\NotBlank]
     private $password;
 
     #[ORM\Column(type: 'string', length: 100)]
@@ -63,7 +62,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
-    #[Assert\Regex(pattern: "^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$")]
     private $phone;
 
     #[ORM\Column(type: 'boolean')]
