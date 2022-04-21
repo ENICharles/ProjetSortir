@@ -175,7 +175,6 @@ class EventRepository extends ServiceEntityRepository
 
         $rq->setParameter('state', $state);
 
-        dump($campus);
         $rq->andWhere('e.campus = :cp');
         $rq->setParameter('cp', $campus);
 
