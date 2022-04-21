@@ -25,10 +25,12 @@
                         <a class="nav__link" href="{{ path('user_profil') }}">Mon Profil</a>
                     </li>
                     <li class="nav__item">
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a class="nav__link" href="{{ path('app_register') }}">
                             <i class="fa-solid fa-id-badge"></i>
                             Créer un utilisateur
                         </a>
+                        {% endif %}
                     </li>
                     <li class="nav__item">
                         <a class="nav__link" href="{{ path('app_logout') }}">Se déconnecter</a>
