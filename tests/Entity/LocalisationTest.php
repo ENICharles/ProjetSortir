@@ -2,6 +2,8 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\City;
+use App\Entity\Event;
 use App\Entity\Localisation;
 use App\Repository\CityRepository;
 use App\Repository\EventRepository;
@@ -43,25 +45,25 @@ class LocalisationTest extends TestCase
         $this->assertEquals(987.654, $localisation->getLongitude());
     }
 
-    public function testEvent(EventRepository $er): void
+    public function testEvent(): void
     {
-        $ev = $er->findOneBy(['id'=>1]);
+        $ev = (new Event())->setName('testEvent');
 
         /* vérification que la liste est vide */
         $localisation = (new Localisation())->addEvent($ev);
-        $this->assertEquals(0, $localisation->getEvents()->count());
+        $this->assertEquals(1, $localisation->getEvents()->count());
 
         /* vérification que l'ajout est conforme */
         $localisation->removeEvent($ev);
-        $this->assertEquals(1, $localisation->getEvents()->count());
+        $this->assertEquals(0, $localisation->getEvents()->count());
     }
 
-    public function testCity(CityRepository $cr): void
+    public function testCity(): void
     {
-        $ct = $cr->findOneBy(['id'=>1]);
+        $city = (new City())->setName('testCity');
 
         /* vérification que la liste est vide */
-        $localisation = (new Localisation())->setCity($ct);
-        $this->assertObjectEquals($ct, $localisation->getCity());
+        $localisation = (new Localisation())->setCity($city);
+        $this->assertEquals($city, $localisation->getCity());
     }
 }

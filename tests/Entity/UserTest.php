@@ -2,6 +2,7 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\Campus;
 use App\Entity\Event;
 use App\Entity\User;
 use App\Repository\CampusRepository;
@@ -45,13 +46,13 @@ class UserTest extends TestCase
         $this->assertEquals("023456", $user->getPassword());;
     }
 
-    public function testCampus(CampusRepository $cr): void
+    public function testCampus(): void
     {
-        $campus = $cr->findOneBy(['id'=>1]);
+        $campus = (new Campus())->setName('campusTest');
 
         $user = (new User())->setCampus($campus);
 
-        $this->assertObjectEquals($campus, $user->getCampus());
+        $this->assertEquals($campus, $user->getCampus());
     }
 
     public function testEmail(): void
@@ -70,9 +71,9 @@ class UserTest extends TestCase
 
     public function testRoles(): void
     {
-        $user = (new User())->setRoles([1]);
+        $user = (new User())->setRoles(['USER_ROLE']);
 
-        $this->assertEquals([1], $user->getRoles());
+        $this->assertEquals("USER_ROLE", ($user->getRoles())[0]);
     }
 
     public function testActive(): void

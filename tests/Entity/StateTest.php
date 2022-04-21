@@ -2,6 +2,7 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\Event;
 use App\Entity\State;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManager;
@@ -22,9 +23,10 @@ class StateTest extends TestCase
         $this->assertEquals("TestLabel", $state->getLabel());
     }
 
-    public function testEvent(EventRepository $er): void
+    /* TODO test à corriger */
+    public function testEvent(): void
     {
-        $ev = $er->findOneBy(['id'=>1]);
+        $ev = (new Event())->setName('testEvent');
 
         /* vérification que la liste est vide */
         $state = (new State())->addEvent($ev);

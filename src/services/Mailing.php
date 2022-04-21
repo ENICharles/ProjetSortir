@@ -17,6 +17,23 @@ class Mailing
     }
 
     /**
+     * Envoie un mail à l'utilisateur, pour valider son inscription sur la plateforme
+     * @param Event $event
+     * @return void
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function confirmationInscriptionPlateforme(User $user)
+    {
+        $email = (new Email())
+            ->from('admin@eni.fr')
+            ->to($user->getEmail())
+            ->subject("Validation d'inscription ")
+            ->text("Vous êtes inscrit sur la plateforme, vous pouvez vous connecter avec ce login : ". $user->getEmail() .  " " . $user->getPassword());
+
+        $this->mailer->send($email);
+    }
+
+    /**
      * Envoie un mail à l'utilisateur, pour valider son inscription
      * @param Event $event
      * @return void
