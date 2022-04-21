@@ -5,34 +5,39 @@ function selectDate()
     document.getElementById('dateEnd').disabled = !document.getElementById('dateEnd').disabled;
 }
 
-function getDataLocalisation()
+function getDataLocalisation(id)
 {
-    let nomLieu = document.getElementById('event_localisation_name').value;
-    let req  = "";
-
-    // alert('hgfkhfg');
-
-    $(document).ready(function ()
+  $(document).ready(function ()
     {
+
         $.ajax(
             {
-                url: "/event/getDataLocalisation",
+                url: "/localisation/getInfo/" + id,
                 method: "GET",
-                dataType: "json",
             })
 
             .done(function(response)
             {
                 let data = JSON.parse(response);
-                //let data = JSON.stringify(response);
 
-                console.log(response);
-                // document.getElementById('event_description').value = data[0].name;
+                document.getElementById('info_lieu').innerHTML =
+                    '<ul>' +
+                    '<li><label>Rue : ' + data.street + '</label></li>' +
+                    '<li><label>Code postal : ' + data.city.postcode + '</label></li>' +
+                    '<li><label>Ville : ' + data.city.name + '</label></li>' +
+                    '<li><label>Latitude : ' + data.latitude + '</label></li>' +
+                    '<li><label>Longitude : ' + data.longitude + '</label></li>' +
+                    '</ul> ';
             })
 
             .fail(function(error)
             {
-                //alert("pas de retour du serveur");
+                alert("pas de retour du serveur");
             });
     });
+}
+
+
+function show(){
+    getDataLocalisation(document.getElementById('event_localisation').value);
 }
