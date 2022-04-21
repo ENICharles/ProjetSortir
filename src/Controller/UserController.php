@@ -29,8 +29,6 @@ class UserController extends AbstractController
            ['email'=> $this->getUser()->getUserIdentifier()]);
        $userForm = $this->createForm(ProfilType::class, $profil[0]);
        $userForm->handleRequest($request);
-          /*TODO / Vérification du changement de pseudo si pas unique page d'erreur*/
-
 
        if ($userForm->isSubmitted() && $userForm->isValid()){
 
@@ -38,9 +36,7 @@ class UserController extends AbstractController
            $pseudoBdD = $userRepository->findAll();
            foreach ($pseudoBdD as $key => $value){
                if($value->getUsername() === $pseudo){
-                   $this->addFlash('error_pseudo', 'Pseudo déjà existant');
                    $flag = true;
-                   return $this->redirectToRoute('user_profil');
                }
            }
                if ($flag == false){
@@ -52,6 +48,10 @@ class UserController extends AbstractController
                    $em->persist($profil[0]);
                    $em->flush();
                    return $this->redirectToRoute('main_index');
+               }
+               else{
+                   $this->addFlash('error_pseudo', 'Pseudo déjà existant');
+                   return $this->redirectToRoute('user_profil');
                }
        }
        return $this->renderForm('user/profil.html.twig',
