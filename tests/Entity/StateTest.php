@@ -23,7 +23,6 @@ class StateTest extends TestCase
         $this->assertEquals("TestLabel", $state->getLabel());
     }
 
-    /* TODO test à corriger */
     public function testEvent(): void
     {
         $ev = (new Event())->setName('testEvent');
