@@ -29,12 +29,7 @@ class CityType extends AbstractType
                 ])
             ->add('postcode',null,
                 [
-//                    'required' => true,
-                    'label' => 'Code postal : ',
-//                    'constraints' =>
-//                        [
-//                            new NotBlank(['message' => 'Merci de saisir un code postal'])
-//                        ]
+                    'label' => 'Code postal : '
                 ])
         ;
     }

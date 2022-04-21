@@ -25,7 +25,6 @@ class FilterType extends AbstractType
                     'choice_label' => 'name',
                     'label_attr' => ['class' => 'form__label'],
                     'attr' => ["class" => "form__field"]
-
                 ]
             )
 
@@ -40,6 +39,7 @@ class FilterType extends AbstractType
             ->add('dateStart',
                 DateTimeType::class,
                 [
+                    'required'=>true,
                     'label' => 'Entre ',
                     'widget' => 'single_text',
                     'input_format' => 'd-m-Y H:i:s',
@@ -50,11 +50,12 @@ class FilterType extends AbstractType
             ->add('dateEnd',
                 DateTimeType::class,
                 [
-                    'required'=>false,
-                    "label" => 'Et ',
-                    'widget' => 'single_text',
-                    'input_format' => 'd-m-Y H:i:s',
-                    'data' => (new \DateTime("now"))->modify('+1 day')
+                  'required'=>true,
+                  "label" => 'Et ',
+                  'widget' => 'single_text',
+                  'input_format' => 'd-m-Y H:i:s',
+                  'attr' => ["class" => "form__field"],
+                  'data' => (new \DateTime("now"))->modify('+1 day')
                 ]
             )
 
@@ -63,12 +64,12 @@ class FilterType extends AbstractType
                 [
                     'label' => "Sorties dont je suis l'organisateur",
                     'attr' => ["class" => "form__field"],
-                    'required' => false,
+                    'required' => false
                 ]
             )
 
             ->add('isRegistered',
-                    CheckboxType::class,
+                CheckboxType::class,
                 [
                     'label' => "Sorties auxquelles je suis inscrit/e",
                     'attr' => ["class" => "form__field"],

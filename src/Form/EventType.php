@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Campus;
 use App\Entity\Event;
+use App\Entity\Localisation;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -17,6 +18,8 @@ class EventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $local=array();
+
         $builder
             ->add('name', TextType::class,[
                 'label'=>'Nom :'
@@ -25,14 +28,17 @@ class EventType extends AbstractType
             ->add('dateStart', DateTimeType::class,[
                 'label' => 'Date de début :',
                 'widget'=> 'single_text',
-                'input_format' => 'yyyy-MM-dd HH:mm'
-
+                'input_format' => 'yyyy-MM-dd HH:mm',
+                'data' => new \DateTime("now"),
+                'required'=> true
             ])
 
             ->add('inscriptionDateLimit',DateTimeType::class,[
                 'label' => 'Date de limite d\'inscription :',
                 'widget'=> 'single_text',
-                'input_format' => 'd/m/Y H:i:'
+                'input_format' => 'd/m/Y H:i:',
+                'data' => (new \DateTime("now"))->modify('+1 month'),
+                'required'=> true
             ])
 
             ->add('nbMaxInscription', IntegerType::class,[
@@ -53,8 +59,12 @@ class EventType extends AbstractType
                 'choice_label'=> 'name'
             ])
 
-            ->add('localisation',LocalisationType::class,[
-                'label'=> false
+            ->add('localisation',EntityType::class,[
+                'label'=> 'Nom du lieu : ',
+                'class'=> Localisation::class,
+                'choice_label'=>'name',
+                'attr'=>['onchange'=>"show()"]
+
             ]);
     }
 

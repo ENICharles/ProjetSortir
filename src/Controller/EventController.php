@@ -3,14 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\Localisation;
-use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
-use App\Repository\LocalisationRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
+use App\services\Mailing;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +22,6 @@ class EventController extends AbstractController
      * Fonction qui permet de créer une sortie
      * @param Request $request
      * @param EntityManagerInterface $entityManager
-     * @param User $user
      * @param StateRepository $st
      * @return Response
      */
@@ -33,36 +30,40 @@ class EventController extends AbstractController
     Request $request,
     EntityManagerInterface $entityManager,
     UserRepository $userRepository,
-    StateRepository $st,
-    LocalisationRepository $localisationRepository
+    StateRepository $st
+
     ): Response
     {
         $etat= $st->findOneBy(['id'=> 1]);
 
-        $user = $userRepository->findOneBy(['id'=>$this->getUser()->getUserIdentifier()]);
-
+        $user = $userRepository->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+        dump($user->getId());
         $event = new Event();
         $event->setOrganisator($user);
-        $local = $localisationRepository->findOneBy(['id'=> 1]);
-        $event->setLocalisation($local);
-        $local->addEvent($event);
         $event->setState($etat);
 
         $eventForm = $this->createForm(EventType::class,$event);
 
         $eventForm->handleRequest($request);
 
-        if ($eventForm->isSubmitted() && $eventForm->isValid()){
+        if ($eventForm->isSubmitted() && $eventForm->isValid())
+        {
+            $dateStart = $eventForm['dateStart']->getData();
+            $dateLimit = $eventForm['inscriptionDateLimit']->getData();
+            if($dateLimit < $dateStart){
+                $entityManager->persist($event);
+                $entityManager->flush();
+                return $this->redirectToRoute('main_index');
+            }else{
+                $this->addFlash('date_error','La date de limite d\'inscription ne peut pas être supérieur à la date de début de la sortie');
+                return $this->redirectToRoute('event_create');
+            }
 
-            $entityManager->persist($local);
-            $entityManager->persist($event);
 
-            $entityManager->flush();
-            return $this->redirectToRoute('main_index');
+
         }
-        return $this->renderForm('event/update.html.twig',
-            compact('eventForm'));
 
+        return $this->renderForm('event/update.html.twig',compact('eventForm'));
     }
 
     /**
@@ -104,7 +105,7 @@ class EventController extends AbstractController
 
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
-        /* ctrl si l'utilisateur connecté est l'orgnanisateur de l'evenement */
+        /* ctrl si l'utilisateur connecté est l'organisateur de l'evenement */
         if($usr->getId() == $event->getOrganisator()->getId())
         {
             $eventForm->handleRequest($request);
@@ -156,10 +157,13 @@ class EventController extends AbstractController
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* Ajout l'évènement de l'utilisateur */
-        $usr->addEvent($ev);
-        $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
-        $em->persist($usr);
-        $em->flush();
+        if($ev->getInscriptionDateLimit() >= new \DateTime('now'))
+        {
+            $usr->addEvent($ev);
+            $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
+            $em->persist($usr);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('main_index');
     }
@@ -172,12 +176,47 @@ class EventController extends AbstractController
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* supprime l'évènement de l'utilisateur */
-        $usr->removeEvent($ev);
-        $ev->setNbMaxInscription($ev->getNbMaxInscription()+1);
-        $em->persist($usr);
-        $em->flush();
+        if($ev->getInscriptionDateLimit() > (new \DateTime()))
+        {
+            $usr->removeEvent($ev);
+            $ev->setNbMaxInscription($ev->getNbMaxInscription() + 1);
+            $em->persist($usr);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('main_index');
     }
+
+    #[Route('/annulation/{id}', name: '_annulation')]
+    public function annulation(EntityManagerInterface $em,
+                               UserRepository $ur,
+                               CampusRepository $cr,
+                               EventRepository $er,
+                               StateRepository $sr,
+                               Request  $request,
+                               Event $ev,
+                               Mailing $mailing
+    ): Response
+    {
+        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+
+        /* annule l'évènement */
+        if($ev->getInscriptionDateLimit() > (new \DateTime()))
+        {
+            /* modification de l'évènement */
+            $ev->setState($sr->findOneBy(['id'=>6]));
+            $ev->setNbMaxInscription(0);
+            $mailing->sendToAllUserEvent(
+                $ev,
+                "Annulation de l'évènement ". $ev->getName(),
+                "L'évènement ". $ev->getName() ." est annulé");
+            $em->persist($usr);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('main_index');
+    }
+
+
 }
 
