@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CityRepository::class)]
 class City
@@ -18,10 +19,13 @@ class City
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups('lieu')]
+    #[Assert\NotBlank]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups('lieu')]
+    #[Assert\NotBlank]
+    #[Assert\Regex("/^(([0-8][0-9])|(9[0-5]))[0-9]{3}$/)")]
     private $postcode;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Localisation::class)]

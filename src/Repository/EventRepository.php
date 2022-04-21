@@ -6,14 +6,11 @@ use App\Entity\Campus;
 use App\Entity\Event;
 use App\Entity\State;
 use App\Entity\User;
-use ContainerEv5lKh6\get_Maker_AutoCommand_MakeDockerDatabase_LazyService;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Boolean;
 
 
 /**
@@ -142,9 +139,9 @@ class EventRepository extends ServiceEntityRepository
      * @param DateTime $debut
      * @param DateTime $fin
      * @param string $motClef
-     * @param User $isManager
-     * @param User $inscrit
-     * @param User $notInscrit
+     * @param bool $isManager
+     * @param bool $inscrit
+     * @param bool $notInscrit
      * @param bool $older
      * @return float|int|mixed|string
      */
@@ -158,7 +155,6 @@ class EventRepository extends ServiceEntityRepository
                                  bool     $older        ,
                                  User     $user)
     {
-
 
         /* recherche de l'état passée */
         $state = ($this->getEntityManager()->getRepository(State::class))->findOneBy(['id'=>'5']);

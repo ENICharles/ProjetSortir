@@ -19,9 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventController extends AbstractController
 {
     /**
-     * Fonction qui permet de créer une sortie
+     * Fonction qui crée une sortie
      * @param Request $request
      * @param EntityManagerInterface $entityManager
+     * @param UserRepository $userRepository
      * @param StateRepository $st
      * @return Response
      */
@@ -58,11 +59,7 @@ class EventController extends AbstractController
                 $this->addFlash('date_error','La date de limite d\'inscription ne peut pas être supérieur à la date de début de la sortie');
                 return $this->redirectToRoute('event_create');
             }
-
-
-
         }
-
         return $this->renderForm('event/update.html.twig',compact('eventForm'));
     }
 
@@ -81,7 +78,6 @@ class EventController extends AbstractController
         return $this->render('event/detail.html.twig',
             compact('event')
         );
-
     }
 
     /**
@@ -90,6 +86,7 @@ class EventController extends AbstractController
      * @param EventRepository $eventRepository
      * @param EntityManagerInterface $entityManager
      * @param Request $request
+     * @param UserRepository $ur
      * @return Response
      */
     #[Route('/update/{id}', name: '_update',requirements: ["id" => "\d+"])]
@@ -117,7 +114,6 @@ class EventController extends AbstractController
                 return $this->redirectToRoute('main_index');
             }
         }
-
         return $this->renderForm('event/update.html.twig',
             compact('eventForm'));
     }
@@ -125,17 +121,15 @@ class EventController extends AbstractController
     /**
      * Fonction qui supprime une sortie sur l'affichage et en base de données
      * @param Event $event
-     * @param EventRepository $eventRepository
      * @param EntityManagerInterface $entityManager
+     * @param UserRepository $ur
      * @return Response
      */
     #[Route('/delete/{id}', name: '_delete',requirements: ["id" => "\d+"])]
     public function delete(
         Event $event,
-        EventRepository $eventRepository,
         EntityManagerInterface $entityManager,
         UserRepository $ur
-
     ): Response
     {
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
@@ -149,12 +143,23 @@ class EventController extends AbstractController
         return $this->redirectToRoute('main_index');
     }
 
+    /**
+     * Inscription à une sortie
+     * @param EntityManagerInterface $em
+     * @param UserRepository $ur
+     * @param Event $ev
+     * @return Response
+     */
     #[Route('/inscription/{id}', name: '_inscription')]
-    public function inscription(EntityManagerInterface $em,Mailing $mailing,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
-    {
-        $lstCampus = $cr->findAll();
 
-        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+    public function inscription(
+        EntityManagerInterface $em,
+        UserRepository $ur,
+        Mailing $mailing,
+        Event $ev
+    ): Response
+    {
+       $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* Ajout l'évènement de l'utilisateur */
         if($ev->getInscriptionDateLimit() >= new \DateTime('now'))
@@ -165,16 +170,28 @@ class EventController extends AbstractController
             $em->persist($usr);
             $em->flush();
         }
-
         return $this->redirectToRoute('main_index');
     }
 
+    /**
+     * Se désinscrire d'un sortie
+     * @param EntityManagerInterface $em
+     * @param UserRepository $ur
+     * @param CampusRepository $cr
+     * @param Event $ev
+     * @return Response
+     */
     #[Route('/desinscription/{id}', name: '_desinscription')]
-    public function desinscription(EntityManagerInterface $em,Mailing $mailing,UserRepository $ur, CampusRepository $cr, EventRepository $er, Request  $request,Event $ev): Response
-    {
-        $lstCampus = $cr->findAll();
 
-        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+    public function desinscription(
+        EntityManagerInterface $em,
+        Mailing $mailing,
+        UserRepository $ur,
+        CampusRepository $cr,
+        Event $ev
+    ): Response
+    {
+       $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* supprime l'évènement de l'utilisateur */
         if($ev->getInscriptionDateLimit() > (new \DateTime()))
@@ -185,19 +202,26 @@ class EventController extends AbstractController
             $em->persist($usr);
             $em->flush();
         }
-
         return $this->redirectToRoute('main_index');
     }
 
+    /**
+     * Fonction d'annulation d'un sortie
+     * @param EntityManagerInterface $em
+     * @param UserRepository $ur
+     * @param StateRepository $sr
+     * @param Event $ev
+     * @param Mailing $mailing
+     * @return Response
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     #[Route('/annulation/{id}', name: '_annulation')]
-    public function annulation(EntityManagerInterface $em,
-                               UserRepository $ur,
-                               CampusRepository $cr,
-                               EventRepository $er,
-                               StateRepository $sr,
-                               Request  $request,
-                               Event $ev,
-                               Mailing $mailing
+    public function annulation(
+        EntityManagerInterface $em,
+        UserRepository $ur,
+        StateRepository $sr,
+        Event $ev,
+        Mailing $mailing
     ): Response
     {
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
@@ -215,10 +239,7 @@ class EventController extends AbstractController
             $em->persist($usr);
             $em->flush();
         }
-
         return $this->redirectToRoute('main_index');
     }
-
-
 }
 

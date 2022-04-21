@@ -2,30 +2,27 @@
 
 namespace App\Controller;
 
-use App\Entity\Event;
 use App\Entity\Filter;
-
 use App\Form\FilterType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
-use App\Repository\FilterRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\services\Mailing;
-
-
 
 #[Route('/',name:'main')]
 class MainController extends AbstractController
 {
+    /**
+     * Porte d'entrée de l'application
+     * @return Response
+     */
     #[Route('/', name: '_index')]
-    public function index(CampusRepository $cr,UserRepository $ur,EventRepository $er): Response
+    public function index(): Response
     {
         if($this->getUser())
         {
@@ -39,33 +36,27 @@ class MainController extends AbstractController
 
     /**
      * Gestion des filtres
-     * @param EntityManagerInterface $em
      * @param UserRepository $ur
      * @param CampusRepository $cr
      * @param EventRepository $er
      * @param Request $request
+     * @param StateRepository $st
      * @return Response
-     * @throws \Exception
      */
     #[Route('/search', name: '_search')]
     public function search(
-        EntityManagerInterface $em,
         UserRepository $ur,
         CampusRepository $cr,
         EventRepository $er,
-        FilterRepository $filterRepository,
         Request  $request,
         StateRepository $st
     ): Response
     {
-        /* recherche tous les campus */
-        $listCampus     = $cr->findAll();
-
-        /* recherche tous les campus */
-        $listState    = $st->findAll();
+        /* recherche tous les états */
+        $listState = $st->findAll();
 
         /* récupération de l'utilisateur */
-        $usr            = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+        $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
         /* récupération du campus de l'utilisateur */
         $selectedCampus = $usr->getCampus();
@@ -109,7 +100,6 @@ class MainController extends AbstractController
 
             return $this->renderForm('main/index.html.twig',compact( 'filterForm', 'listEvent'));
         }
-
         return $this->renderForm('main/index.html.twig',compact( 'filterForm', 'listEvent','listState'));
     }
 }

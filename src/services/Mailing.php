@@ -68,7 +68,7 @@ class Mailing
     }
 
     /**
-     * Envoie un mail à tous les uttilisateurs
+     * Envoie un mail à tous les utilisateurs
      * @param Event $event
      * @param string $subject
      * @param string $body

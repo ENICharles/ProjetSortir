@@ -154,10 +154,6 @@ class Localisation
 
     public function __toString(){
         return $this->getName();
-//               $this->getStreet().' '.
-//               $this->getCity()->getPostcode().' '.
-//               $this->getCity()->getName().' '.
-//               $this->getLatitude().' '.
-//               $this->getLongitude();
+
     }
 }

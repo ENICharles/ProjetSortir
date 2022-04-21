@@ -16,6 +16,13 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[Route('/localisation', name: 'localisation')]
 class LocalisationController extends AbstractController
 {
+    /**
+     * Fonction qui crée un nouveau lieu
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param LocalisationRepository $localisationRepository
+     * @return Response
+     */
     #[Route('/new', name: '_new')]
     public function new(
         Request                $request,
@@ -37,10 +44,8 @@ class LocalisationController extends AbstractController
             $localisation = $localisationRepository->findAll();
             foreach ($localisation as $key => $value) {
                 if ($value->getStreet() === $street && $value->getName() === $name && $value->getCity() === $city) {
-                    //dd($message = "Ce lieu existe déjà");
                     $found = true;
                     $this->addFlash('erreur', 'Lieu déjà existant, création impossible');
-
                 }
             }
             if ($found == false) {
@@ -52,14 +57,17 @@ class LocalisationController extends AbstractController
                 $entityManager->flush();
                 return $this->redirectToRoute('event_create');
             }
-
         }
         return $this->renderForm('localisation/new.html.twig',
             compact('localisationForm'));
-
-
     }
 
+    /**
+     * Fonction qui transforme les infos du lieu en json
+     * @param SerializerInterface $serializer
+     * @param Localisation $local
+     * @return Response
+     */
     #[Route('/getInfo/{id}', name: '_getInfo')]
     public function getInfo(SerializerInterface $serializer,Localisation $local)
     {
