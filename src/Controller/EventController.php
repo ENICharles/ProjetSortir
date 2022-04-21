@@ -83,7 +83,6 @@ class EventController extends AbstractController
     /**
      * Fonction qui permet de modifier une sortie
      * @param Event $event
-     * @param EventRepository $eventRepository
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @param UserRepository $ur
@@ -92,7 +91,6 @@ class EventController extends AbstractController
     #[Route('/update/{id}', name: '_update',requirements: ["id" => "\d+"])]
     public function update(
         Event $event,
-        EventRepository $eventRepository,
         EntityManagerInterface $entityManager,
         Request $request,
         UserRepository $ur
@@ -177,7 +175,6 @@ class EventController extends AbstractController
      * Se désinscrire d'un sortie
      * @param EntityManagerInterface $em
      * @param UserRepository $ur
-     * @param CampusRepository $cr
      * @param Event $ev
      * @return Response
      */
@@ -187,7 +184,6 @@ class EventController extends AbstractController
         EntityManagerInterface $em,
         Mailing $mailing,
         UserRepository $ur,
-        CampusRepository $cr,
         Event $ev
     ): Response
     {
