@@ -5,17 +5,15 @@
 {% endblock %}
 
 {% block body %}
-        <h2 class="user_detail_h2">{{ user.username }}</h2>
-        <div class="detail">
-            <p class="detail_p">Prénom : {{ user.firstname }}</p>
-            <p class="detail_p">Nom : {{ user.name }}</p>
-            <p class="detail_p">Téléphone : {{ user.phone}}</p>
-            <p class="detail_p">Email : {{ user.email}}</p>
-            <p class="detail_p"> Campus : {{ user.campus.name }}</p>
-            <a class="detail_lien" href="{{ path('main_index') }}"><button>Annuler</button></a>
-        </div>
-
-
+    <h2 class="user_detail_h2">{{ user.username }}</h2>
+    <div class="detail">
+        <p class="detail_p">Prénom : {{ user.firstname }}</p>
+        <p class="detail_p">Nom : {{ user.name }}</p>
+        <p class="detail_p">Téléphone : {{ user.phone}}</p>
+        <p class="detail_p">Email : {{ user.email}}</p>
+        <p class="detail_p"> Campus : {{ user.campus.name }}</p>
+        <a class="detail_lien" href="{{ path('main_index') }}">Annuler</a>
+    </div>
 {% endblock %}
 
 
