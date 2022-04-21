@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-
+    {{ parent() }} | Créer lieu
 {% endblock %}
 
 {% block body %}
@@ -14,5 +14,4 @@
     <button>Enregistrer</button>
     {{ form_end(localisationForm) }}
     <a href="{{ path('main_index') }}"><button>Annuler</button></a>
-    {#    <a href="{{ path('event_delete') }}"><button>Supprimer la sortie</button></a>#}
 {% endblock %}
