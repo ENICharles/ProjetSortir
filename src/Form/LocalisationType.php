@@ -24,14 +24,13 @@ class LocalisationType extends AbstractType
                 'label'=>'Nom du lieu',
             ])
             ->add('street', null,[
-                'label'=>'Rue',
-                'disabled'=> true
+                'label'=>'Rue'
             ])
             ->add('latitude',TextType::class,[
-                'disabled'=> true
+                'required'=>false
             ])
             ->add('longitude',TextType::class,[
-                'disabled'=> true
+                'required'=>false
             ]);
     }
 
