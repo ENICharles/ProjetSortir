@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    autre erreur page
-    <a href="{{ path('main_index') }}">Retour sur la page d'accueil</a>
+    <div class="error_page">
+        <img class="img_error" src="{{ asset('img/Erreur.PNG') }}" alt="error">
+
+        <a class="lien_error" href="{{ path('main_index') }}">Retour sur la page d'accueil</a>
+    </div>
 {% endblock %}
