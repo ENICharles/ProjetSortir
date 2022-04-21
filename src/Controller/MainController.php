@@ -37,7 +37,6 @@ class MainController extends AbstractController
     /**
      * Gestion des filtres
      * @param UserRepository $ur
-     * @param CampusRepository $cr
      * @param EventRepository $er
      * @param Request $request
      * @param StateRepository $st
@@ -46,7 +45,6 @@ class MainController extends AbstractController
     #[Route('/search', name: '_search')]
     public function search(
         UserRepository $ur,
-        CampusRepository $cr,
         EventRepository $er,
         Request  $request,
         StateRepository $st

@@ -53,7 +53,7 @@ class FilterType extends AbstractType
                   'widget' => 'single_text',
                   'input_format' => 'd-m-Y H:i:s',
                   'attr' => ["class" => "form__field"],
-                  'data' => (new \DateTime("now"))->modify('+1 day')
+                  'data' => (new \DateTime("now"))->modify('+1 Month')
                 ]
             )
 
