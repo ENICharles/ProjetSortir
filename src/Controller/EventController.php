@@ -34,7 +34,9 @@ class EventController extends AbstractController
     EntityManagerInterface $entityManager,
     UserRepository $userRepository,
     StateRepository $st,
-    LocalisationRepository $localisationRepository
+    LocalisationRepository $localisationRepository,
+    User $user,
+    Localisation $local
     ): Response
     {
         $etat= $st->findOneBy(['id'=> 1]);
@@ -43,8 +45,6 @@ class EventController extends AbstractController
 
         $event = new Event();
         $event->setOrganisator($user);
-
-        $local = $localisationRepository->findOneBy(['id'=> 1]);
         $event->setLocalisation($local);
         $local->addEvent($event);
         $event->setState($etat);
@@ -105,7 +105,7 @@ class EventController extends AbstractController
 
         $usr = $ur->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
 
-        /* ctrl si l'utilisateur connecté est l'orgnanisateur de l'evenement */
+        /* ctrl si l'utilisateur connecté est l'organisateur de l'evenement */
         if($usr->getId() == $event->getOrganisator()->getId())
         {
             $eventForm->handleRequest($request);
@@ -186,5 +186,7 @@ class EventController extends AbstractController
 
         return $this->redirectToRoute('main_index');
     }
+
+
 }
 
