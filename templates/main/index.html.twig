@@ -73,12 +73,12 @@
                              </div>
                          </div>
                          {# Afficher détail dans tous les cas #}
-                         <div class="card__action">
+{#                         <div class="card__action">#}
                              <a class="card__link" href="{{ path('event_detail' , {'id': event.id }) }}">
                                  <i class="fa-regular fa-eye"></i>
                                  Afficher
                              </a>
-                         </div>
+{#                         </div>#}
                          {#état = ouvert#}
                          {% if event.state.id == 2 %}
                              {% if orga == '0' %}
@@ -133,5 +133,6 @@
          {% else %}
              <p>pas de sorties</p>
          {% endfor %}
+        </div>
      </div>
  {% endblock %}
