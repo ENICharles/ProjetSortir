@@ -1,7 +1,36 @@
 {% extends 'base.html.twig' %}
 
 {% block header %}
-
+    <div class="header__container">
+        <div class="header__logo">
+            <a class="header__link" href="{{ path('main_index') }}">
+                <img class="header__img" src="#" alt="Logo">
+                <h1 class="header__sigle">Sortir.com</h1>
+            </a>
+        </div>
+        <nav>
+            <label class="nav_menu" href="#">
+                <i class="fa-solid fa-bars"></i>
+            </label>
+            <ul class="nav__list">
+                <li class="nav__item">
+                    <a class="nav__link" href="{{ path('event_create') }}">Créer une sortie</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="{{ path('user_profil') }}">Mon Profil</a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="{{ path('app_register') }}">
+                        <i class="fa-solid fa-id-badge"></i>
+                        Créer un utilisateur
+                    </a>
+                </li>
+                <li class="nav__item">
+                    <a class="nav__link" href="{{ path('app_logout') }}">Se déconnecter</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 {% endblock %}
 
 {% block body %}

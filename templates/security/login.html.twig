@@ -4,6 +4,17 @@
     {{parent()}} | Connexion
 {% endblock %}
 
+{% block header %}
+    <div class="header__container">
+        <div class="header__logo">
+            <a class="header__link" href="{{ path('main_index') }}">
+                <img class="header__img" src="#" alt="Logo">
+                <h1 class="header__sigle">Sortir.com</h1>
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
 {% block connection %}
     <div class="login">
         <div class="login__container">
