@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Filter;
 use App\Form\FilterType;
-use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
