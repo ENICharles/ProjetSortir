@@ -72,37 +72,64 @@
                                  <p class="card__text">places restantes {{event.nbMaxInscription}}</p>
                              </div>
                          </div>
+                         {# Afficher détail dans tous les cas #}
                          <div class="card__action">
                              <a class="card__link" href="{{ path('event_detail' , {'id': event.id }) }}">
                                  <i class="fa-regular fa-eye"></i>
                                  Afficher
                              </a>
-                             {% if orga == '1' %}
-                                 <a class="card__link" href="{{ path('event_update' , {'id': event.id }) }}">
-                                     <i class="fa-regular fa-pen-to-square"></i>
-                                     Modifier
-                                 </a>
-                                 <a class="card__link" href="{{ path('event_delete' , {'id': event.id }) }}">
-                                     <i class="fa-regular fa-trash-can"></i>
-                                     Supprimer
-                                 </a>
-                             {% endif %}
                          </div>
-                     </div>
-                     {% if insc == '1' %}
-                         <a class="card__link" href="{{ path('event_desinscription' , {'id': event.id }) }}">
-                             <div class="card__footer desinscription">
-                                 <p>Se désister</p>
-                             </div>
-                         </a>
-                     {% else %}
-                         <a class="card__link" href="{{ path('event_inscription' , {'id': event.id }) }}">
-                             <div class="card__footer inscription">
-                                 <p>S'inscrire</p>
-                             </div>
-                         </a>
+                         {#état = ouvert#}
+                         {% if event.state.id == 2 %}
+                             {% if orga == '0' %}
+                                     {% if insc == '1' %}
+                                     <a class="card__link" href="{{ path('event_desinscription' , {'id': event.id }) }}">
+                                         <div class="card__footer desinscription">
+                                             <p>Se désister</p>
+                                         </div>
+                                     </a>
+                                     {% else %}
+                                         <a class="card__link" href="{{ path('event_inscription' , {'id': event.id }) }}">
+                                             <div class="card__footer inscription">
+                                                 <p>S'inscrire</p>
+                                             </div>
+                                         </a>
+                                     {% endif %}
+                             {% else %}
+                                 <div class="card__action">
+                                     <a class="card__link" href="{{ path('event_update' , {'id': event.id }) }}">
+                                         <i class="fa-regular fa-pen-to-square"></i>
+                                         Modifier
+                                     </a>
+                                     <a class="card__link" href="{{ path('event_delete' , {'id': event.id }) }}">
+                                         <i class="fa-regular fa-trash-can"></i>
+                                         Supprimer
+                                     </a>
+                                     {#<a class="card__link" href="{{ path('event_annulation' , {'id': event.id }) }}">#}
+                                 </div>
+                             {% endif %}
                          {% endif %}
-             </div>
+
+                         {#état = cloturée #}
+                         {% if event.state.id == 3 %}
+                             {% if orga == '1' %}
+                                 <div class="card__action">
+                                     <a class="card__link" href="{{ path('event_update' , {'id': event.id }) }}">
+                                         <i class="fa-regular fa-pen-to-square"></i>
+                                         Modifier
+                                     </a>
+                                     <a class="card__link" href="{{ path('event_delete' , {'id': event.id }) }}">
+                                         <i class="fa-regular fa-trash-can"></i>
+                                         Supprimer
+                                     </a>
+                                     <a class="card__link" href="{{ path('event_annulation' , {'id': event.id }) }}">
+                                         <i class="fa-regular fa-trash-can"></i>
+                                         Annuler
+                                     </a>
+                                 </div>
+                             {% endif %}
+                         {% endif %}
+                  </div>
          {% else %}
              <p>pas de sorties</p>
          {% endfor %}
