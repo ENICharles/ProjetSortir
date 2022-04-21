@@ -6,6 +6,7 @@ use App\Repository\LocalisationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LocalisationRepository::class)]
@@ -32,12 +33,15 @@ class Localisation
         max: 250,
         minMessage: 'Le nombre de caractère minimum est de 2',
         maxMessage: 'Le nombre de caractère maximum est de 255')]
+    #[Groups('lieu')]
     private $street;
 
     #[ORM\Column(type: 'float', nullable: true)]
+    #[Groups('lieu')]
     private $latitude;
 
     #[ORM\Column(type: 'float', nullable: true)]
+    #[Groups('lieu')]
     private $longitude;
 
     #[ORM\OneToMany(mappedBy: 'localisation', targetEntity: Event::class)]
@@ -45,6 +49,7 @@ class Localisation
 
     #[ORM\ManyToOne(targetEntity: City::class, inversedBy: 'localisations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups('lieu')]
     private $city;
 
     public function __construct()
@@ -145,5 +150,14 @@ class Localisation
         $this->city = $city;
 
         return $this;
+    }
+
+    public function __toString(){
+        return $this->getName();
+//               $this->getStreet().' '.
+//               $this->getCity()->getPostcode().' '.
+//               $this->getCity()->getName().' '.
+//               $this->getLatitude().' '.
+//               $this->getLongitude();
     }
 }
