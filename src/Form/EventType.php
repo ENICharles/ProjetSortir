@@ -26,7 +26,6 @@ class EventType extends AbstractType
                 'label' => 'Date de début :',
                 'widget'=> 'single_text',
                 'input_format' => 'yyyy-MM-dd HH:mm'
-
             ])
 
             ->add('inscriptionDateLimit',DateTimeType::class,[

@@ -25,17 +25,13 @@ class LocalisationType extends AbstractType
 
             ->add('name', TextType::class,[
                 'label'=>'Nom du lieu',
-                'attr'=>['onkeypress'=>'getDataLocalisation()']
-
             ])
             ->add('street', null,[
                 'label'=>'Rue'
 
             ])
             ->add('latitude',TextType::class)
-            ->add('longitude',TextType::class)
-
-        ;
+            ->add('longitude',TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -59,6 +59,7 @@ class EventController extends AbstractController
             $entityManager->persist($event);
 
             $entityManager->flush();
+
             return $this->redirectToRoute('main_index');
         }
 
