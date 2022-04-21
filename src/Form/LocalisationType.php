@@ -28,7 +28,6 @@ class LocalisationType extends AbstractType
             ])
             ->add('street', null,[
                 'label'=>'Rue'
-
             ])
             ->add('latitude',TextType::class)
             ->add('longitude',TextType::class);
