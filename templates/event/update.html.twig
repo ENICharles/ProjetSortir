@@ -4,20 +4,21 @@
 {% endblock %}
 
 {% block body %}
-    {% for message in app.flashes('date_error') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
-    {{ form_start(eventForm) }}
-    {{ form_widget(eventForm) }}
-    <div id="info_lieu"></div>
-    <button>Enregistrer</button>
-    <a href="{{ path('localisation_new') }}">Créer nouveau lieu</a>
-    {{ form_end(eventForm) }}
-    <a href="{{ path('main_index') }}"><button>Annuler</button></a>
-{#    <a href="{{ path('event_delete') }}"><button>Supprimer la sortie</button></a>#}
-
+<div class="main__create">
+  <h2>Créer une nouvelle sortie</h2>
+  {% for message in app.flashes('date_error') %}
+  <div class="alert alert-success">
+      {{ message }}
+  </div>
+  {% endfor %}
+  {{ form_start(eventForm) }}
+  {{ form_widget(eventForm) }}
+  <div id="info_lieu"></div>
+  <button>Enregistrer</button>
+  <a class="form__button" href="{{ path('localisation_new') }}">Créer nouveau lieu</a>
+  {{ form_end(eventForm) }}
+  <a href="{{ path('main_index') }}"><button>Annuler</button></a>
+</div>
 {% endblock %}
 
 
