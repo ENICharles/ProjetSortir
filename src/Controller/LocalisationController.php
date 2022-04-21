@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/localisation', name: 'localisation')]
 class LocalisationController extends AbstractController
@@ -21,7 +22,7 @@ class LocalisationController extends AbstractController
         LocalisationRepository $localisationRepository
     ): Response
     {
-        $found=false;
+        $found = false;
         $local = new Localisation();
         $localisationForm = $this->createForm(LocalisationType::class, $local);
         $localisationForm->handleRequest($request);
@@ -35,23 +36,33 @@ class LocalisationController extends AbstractController
                 if ($value->getStreet() === $street && $value->getName() === $name && $value->getCity() === $city) {
                     //dd($message = "Ce lieu existe déjà");
                     $found = true;
-                    $this->addFlash('erreur','Lieu déjà existant, création impossible');
+                    $this->addFlash('erreur', 'Lieu déjà existant, création impossible');
 
                 }
             }
-            if($found==false){
+            if ($found == false) {
                 $local->setName($name);
-                    $local->setStreet($street);
-                    $local->setCity($city);
-                    $entityManager->persist($local);
-                    $entityManager->flush();
-                    return $this->redirectToRoute('event_create');
+                $local->setStreet($street);
+                $local->setCity($city);
+                $entityManager->persist($local);
+                $entityManager->flush();
+                return $this->redirectToRoute('event_create');
             }
 
         }
         return $this->renderForm('localisation/new.html.twig',
             compact('localisationForm'));
 
+
+    }
+
+    #[Route('/getInfo/{id}', name: '_getInfo')]
+    public function getInfo(SerializerInterface $serializer,Localisation $local)
+    {
+        return new Response($serializer->serialize(
+            $local,
+            'json', ['groups' => ['lieu']]
+        ));
 
     }
 }

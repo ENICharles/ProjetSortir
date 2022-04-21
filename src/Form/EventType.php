@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Campus;
 use App\Entity\Event;
+use App\Entity\Localisation;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -17,6 +18,8 @@ class EventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $local=array();
+
         $builder
             ->add('name', TextType::class,[
                 'label'=>'Nom :'
@@ -53,8 +56,12 @@ class EventType extends AbstractType
                 'choice_label'=> 'name'
             ])
 
-            ->add('localisation',LocalisationType::class,[
-                'label'=> false
+            ->add('localisation',EntityType::class,[
+                'label'=> 'Nom du lieu : ',
+                'class'=> Localisation::class,
+                'choice_label'=>'name',
+                'attr'=>['onchange'=>"show()"]
+
             ]);
     }
 
