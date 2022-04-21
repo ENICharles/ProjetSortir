@@ -38,6 +38,7 @@ class EventController extends AbstractController
         $etat= $st->findOneBy(['id'=> 1]);
 
         $user = $userRepository->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
+
         $event = new Event();
         $event->setOrganisator($user);
         $event->setState($etat);
@@ -150,9 +151,11 @@ class EventController extends AbstractController
      * @return Response
      */
     #[Route('/inscription/{id}', name: '_inscription')]
+
     public function inscription(
         EntityManagerInterface $em,
         UserRepository $ur,
+        Mailing $mailing,
         Event $ev
     ): Response
     {
@@ -162,6 +165,7 @@ class EventController extends AbstractController
         if($ev->getInscriptionDateLimit() >= new \DateTime('now'))
         {
             $usr->addEvent($ev);
+            $mailing->confrimationInscription($ev);
             $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
             $em->persist($usr);
             $em->flush();
@@ -178,8 +182,10 @@ class EventController extends AbstractController
      * @return Response
      */
     #[Route('/desinscription/{id}', name: '_desinscription')]
+
     public function desinscription(
         EntityManagerInterface $em,
+        Mailing $mailing,
         UserRepository $ur,
         CampusRepository $cr,
         Event $ev
@@ -190,6 +196,7 @@ class EventController extends AbstractController
         /* supprime l'évènement de l'utilisateur */
         if($ev->getInscriptionDateLimit() > (new \DateTime()))
         {
+            $mailing->confrimationDesistement($ev);
             $usr->removeEvent($ev);
             $ev->setNbMaxInscription($ev->getNbMaxInscription() + 1);
             $em->persist($usr);

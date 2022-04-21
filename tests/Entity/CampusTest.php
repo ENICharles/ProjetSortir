@@ -32,7 +32,7 @@ class CampusTest extends TestCase
         $this->assertEquals(0, $campus->getUsers()->count());
 
         /* ajout de l'user */
-        $campus->addEvent($user);
+        $campus->addUser($user);
 
         /* validation de l'ajout */
         $this->assertEquals(1, $campus->getUsers()->count());
