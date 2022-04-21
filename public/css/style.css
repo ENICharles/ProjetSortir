@@ -446,3 +446,16 @@ margin-top: 15px;
 .detail_lien{
     margin-top: 45px;
 }
+/* Page Error
+   ========================================================================== */
+.error_page{
+    grid-column: 2;
+}
+.img_error{
+
+}
+.lien_error{
+    color: white;
+    text-decoration: none;
+    font-size: xx-large;
+}

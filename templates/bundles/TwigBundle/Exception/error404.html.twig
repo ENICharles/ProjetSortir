@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    erreur page 404
-    <a href="{{ path('main_index') }}">Retour sur la page d'accueil</a>
+    <div class="error_page">
+    <img class="img_error" src="{{ asset('img/Erreur 404.PNG') }}" alt="error 404">
+
+    <a class="lien_error" href="{{ path('main_index') }}">Retour sur la page d'accueil</a>
+    </div>
 {% endblock %}
