@@ -1,7 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
+    {{ parent() }} | Détails de la sortie
+{% endblock %}
 
+{% block header %}
+    <div class="header__container">
+        <div class="header__logo">
+            <a class="header__link" href="{{ path('main_index') }}">
+                <img class="header__img" src="#" alt="Logo">
+                <h1 class="header__sigle">Sortir.com</h1>
+            </a>
+        </div>
+    </div>
 {% endblock %}
 
 {% block body %}

@@ -6,14 +6,11 @@ use App\Entity\Campus;
 use App\Entity\Event;
 use App\Entity\State;
 use App\Entity\User;
-use ContainerEv5lKh6\get_Maker_AutoCommand_MakeDockerDatabase_LazyService;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Boolean;
 
 
 /**
@@ -179,7 +176,6 @@ class EventRepository extends ServiceEntityRepository
 
         $rq->setParameter('state', $state);
 
-        dump($campus);
         $rq->andWhere('e.campus = :cp');
         $rq->setParameter('cp', $campus);
 

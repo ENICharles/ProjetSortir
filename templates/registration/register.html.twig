@@ -1,13 +1,24 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} | S'inscrire
+    {{ parent() }} | Créer un utilisateur
+{% endblock %}
+
+{% block header %}
+    <div class="header__container">
+        <div class="header__logo">
+            <a class="header__link" href="{{ path('main_index') }}">
+                <img class="header__img" src="#" alt="Logo">
+                <h1 class="header__sigle">Sortir.com</h1>
+            </a>
+        </div>
+    </div>
 {% endblock %}
 
 {% block connection %}
     <div class="login">
         <div class="login__container">
-            <h2 class="register__title">Créez votre compte</h2>
+            <h2 class="register__title">Créez un utilisateur</h2>
             <div class="register__form">
                 {{ form_start(registrationForm) }}
                 {{ form_row(registrationForm.name) }}
@@ -20,9 +31,12 @@
                     label: 'Mot de passe'
                 }) }}
                 <div>
-                    <button class="form__button" type="submit">S'inscrire</button>
+                    <button class="form__button" type="submit">Créer</button>
                 </div>
                 {{ form_end(registrationForm) }}
+            </div>
+            <div class="redirect">
+                <a class="form__link" href="{{ path('main_index') }}">Retour</a>
             </div>
         </div>
 
