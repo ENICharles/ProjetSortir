@@ -15,7 +15,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/user', name: 'user')]
 class UserController extends AbstractController
 {
-
+    /**
+     * Fonction qui affiche le profil de l'utilisateur et qui permet de le modifier
+     * @param EntityManagerInterface $em
+     * @param UserRepository $userRepository
+     * @param Request $request
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     * @return Response
+     */
     #[Route('/profil', name: '_profil')]
     public function profil(
         EntityManagerInterface $em,
@@ -24,7 +31,7 @@ class UserController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher
     ): Response
     {
-        $flag = false;
+       $flag = false;
        $profil = $userRepository->findBy(
            ['email'=> $this->getUser()->getUserIdentifier()]);
        $userForm = $this->createForm(ProfilType::class, $profil[0]);
@@ -58,10 +65,14 @@ class UserController extends AbstractController
            compact('userForm'));
     }
 
+    /**
+     * Fonction qui affiche le détail d'un utilisateur
+     * @param User $user
+     * @return Response
+     */
     #[Route('/detail/{id}', name: '_detail',requirements: ["id" => "\d+"])]
     public function detail(
         User $user,
-        UserRepository $userRepository
     ): Response
     {
         return $this->render(
@@ -69,5 +80,4 @@ class UserController extends AbstractController
             compact("user")
         );
     }
-
 }
