@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Andada+Pro&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Andada+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
         <script src="{{ asset('js/script.js') }}"></script>
 
     </head>
@@ -53,7 +53,7 @@
                                     </a>
                                 </li>
                                 <li class="nav__item">
-                                    <a href="{{ path('app_register') }}">
+                                    <a class="nav__link" href="{{ path('app_register') }}">
                                         <i class="fa-solid fa-id-badge"></i>
                                         S'enregistrer
                                     </a>
@@ -63,6 +63,8 @@
                     {% endif %}
                 </div>
             </header>
+            {% block connection %}
+            {% endblock %}
             <main class="main">
                 {% block body %}
                 {% endblock %}

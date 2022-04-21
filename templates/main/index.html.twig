@@ -5,21 +5,19 @@
 {% endblock %}
 
 {% block body %}
-
-
-        <div class="form__container">
-            {{ form_start(filterForm) }}
-            {{ form_errors(filterForm) }}
-            {{ form_widget(filterForm) }}
-            <small>
-                {{ form_help(filterForm) }}
-            </small>
-            <div>
-                <button class="form__button">Rechercher</button>
-            </div>
-
+    <div class="form__container">
+        {{ form_start(filterForm) }}
+        {{ form_errors(filterForm) }}
+        {{ form_widget(filterForm) }}
+        <small>
+            {{ form_help(filterForm) }}
+        </small>
+        <div>
+            <button class="form__button">Rechercher</button>
         </div>
-        {{ form_end(filterForm) }}
+
+    </div>
+    {{ form_end(filterForm) }}
 {% endblock %}
 
 {% block event %}

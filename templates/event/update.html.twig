@@ -4,12 +4,16 @@
 {% endblock %}
 
 {% block body %}
-    {{ form_start(eventForm) }}
-    {{ form_widget(eventForm) }}
-    <button>Enregistrer</button>
-    <a href="{{ path('localisation_new') }}">Créer nouveau lieu</a>
-    {{ form_end(eventForm) }}
-    <a href="{{ path('main_index') }}"><button>Annuler</button></a>
+    <div class="main__create">
+        <h2>Créer une nouvelle sortie</h2>
+        {{ form_start(eventForm) }}
+        {{ form_widget(eventForm) }}
+        <button>Enregistrer</button>
+
+        {{ form_end(eventForm) }}
+        <a href="{{ path('main_index') }}"><button>Annuler</button></a>
+    </div>
+    <a class="form__button" href="{{ path('localisation_new') }}">Créer nouveau lieu</a>
 {#    <a href="{{ path('event_delete') }}"><button>Supprimer la sortie</button></a>#}
 {% endblock %}
 
