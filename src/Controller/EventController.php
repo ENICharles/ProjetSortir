@@ -162,7 +162,7 @@ class EventController extends AbstractController
         if($ev->getInscriptionDateLimit() >= new \DateTime('now'))
         {
             $usr->addEvent($ev);
-            $mailing->confirmationInscription($ev);
+//            $mailing->confrimationInscription($ev);
             $ev->setNbMaxInscription($ev->getNbMaxInscription()-1);
             $em->persist($usr);
             $em->flush();
@@ -191,7 +191,7 @@ class EventController extends AbstractController
         /* supprime l'évènement de l'utilisateur */
         if($ev->getInscriptionDateLimit() > (new \DateTime()))
         {
-            $mailing->confrimationDesistement($ev);
+//            $mailing->confrimationDesistement($ev);
             $usr->removeEvent($ev);
             $ev->setNbMaxInscription($ev->getNbMaxInscription() + 1);
             $em->persist($usr);
