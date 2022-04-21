@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\City;
 use App\Entity\Localisation;
 use App\Form\LocalisationType;
 use App\Repository\LocalisationRepository;
@@ -24,13 +25,15 @@ class LocalisationController extends AbstractController
     {
         $found = false;
         $local = new Localisation();
+        $city = new City();
+        $local->setCity($city);
         $localisationForm = $this->createForm(LocalisationType::class, $local);
         $localisationForm->handleRequest($request);
 
         if ($localisationForm->isSubmitted() && $localisationForm->isValid()) {
             $street = $localisationForm['street']->getData();
             $name = $localisationForm['name']->getData();
-            $city = $localisationForm['city']->getData();
+            $cityForm = $localisationForm['city']->getData();
             $localisation = $localisationRepository->findAll();
             foreach ($localisation as $key => $value) {
                 if ($value->getStreet() === $street && $value->getName() === $name && $value->getCity() === $city) {
@@ -43,7 +46,8 @@ class LocalisationController extends AbstractController
             if ($found == false) {
                 $local->setName($name);
                 $local->setStreet($street);
-                $local->setCity($city);
+                $local->setCity($cityForm);
+                $entityManager->persist($city);
                 $entityManager->persist($local);
                 $entityManager->flush();
                 return $this->redirectToRoute('event_create');

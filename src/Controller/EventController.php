@@ -3,12 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\Localisation;
-use App\Entity\User;
 use App\Form\EventType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
-use App\Repository\LocalisationRepository;
 use App\Repository\StateRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,7 +21,6 @@ class EventController extends AbstractController
      * Fonction qui permet de créer une sortie
      * @param Request $request
      * @param EntityManagerInterface $entityManager
-     * @param User $user
      * @param StateRepository $st
      * @return Response
      */
@@ -33,20 +29,16 @@ class EventController extends AbstractController
     Request $request,
     EntityManagerInterface $entityManager,
     UserRepository $userRepository,
-    StateRepository $st,
-    LocalisationRepository $localisationRepository,
-    User $user,
-    Localisation $local
+    StateRepository $st
+
     ): Response
     {
         $etat= $st->findOneBy(['id'=> 1]);
 
         $user = $userRepository->findOneBy(['email'  => $this->getUser()->getUserIdentifier()]);
-
+        dump($user->getId());
         $event = new Event();
         $event->setOrganisator($user);
-        $event->setLocalisation($local);
-        $local->addEvent($event);
         $event->setState($etat);
 
         $eventForm = $this->createForm(EventType::class,$event);
@@ -55,12 +47,19 @@ class EventController extends AbstractController
 
         if ($eventForm->isSubmitted() && $eventForm->isValid())
         {
-            $entityManager->persist($local);
-            $entityManager->persist($event);
+            $dateStart = $eventForm['dateStart']->getData();
+            $dateLimit = $eventForm['inscriptionDateLimit']->getData();
+            if($dateLimit < $dateStart){
+                $entityManager->persist($event);
+                $entityManager->flush();
+                return $this->redirectToRoute('main_index');
+            }else{
+                $this->addFlash('date_error','La date de limite d\'inscription ne peut pas être supérieur à la date de début de la sortie');
+                return $this->redirectToRoute('event_create');
+            }
 
-            $entityManager->flush();
 
-            return $this->redirectToRoute('main_index');
+
         }
 
         return $this->renderForm('event/update.html.twig',compact('eventForm'));
