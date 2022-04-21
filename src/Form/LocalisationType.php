@@ -20,13 +20,9 @@ class LocalisationType extends AbstractType
                 'label'=>false
                 ]
             )
-
             ->add('name', null,[
                 'label'=>'Nom du lieu',
-
             ])
-
-
             ->add('street', null,[
                 'label'=>'Rue',
                 'disabled'=> true
@@ -36,9 +32,7 @@ class LocalisationType extends AbstractType
             ])
             ->add('longitude',TextType::class,[
                 'disabled'=> true
-            ])
-
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
