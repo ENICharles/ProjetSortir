@@ -1,7 +1,52 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
+{% endblock %}
 
+{% block header %}
+    <div class="header__container">
+        <div class="header__logo">
+            <a class="header__link" href="{{ path('main_index') }}">
+                <img class="header__img" src="{{ asset('img/logo_sortir.png') }}" alt="Logo">
+            </a>
+        </div>
+        {% if app.user %}
+            <nav>
+                <label class="nav_menu" href="#">
+                    <i class="fa-solid fa-bars"></i>
+                </label>
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a class="nav__link" href="{{ path('event_create') }}">Créer une sortie</a>
+                    </li>
+                    <li class="nav__item">
+                        <a class="nav__link" href="{{ path('user_profil') }}">Mon Profil</a>
+                    </li>
+                    <li class="nav__item">
+                        <a class="nav__link" href="{{ path('app_register') }}">
+                            <i class="fa-solid fa-id-badge"></i>
+                            Créer un utilisateur
+                        </a>
+                    </li>
+                    <li class="nav__item">
+                        <a class="nav__link" href="{{ path('app_logout') }}">Se déconnecter</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+        {% if not app.user %}
+            <nav class="nav">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a class="nav__link" href="{{ path('app_login') }}">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            Se connecter
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block body %}
@@ -12,7 +57,7 @@
         <p class="detail_p">Téléphone : {{ user.phone}}</p>
         <p class="detail_p">Email : {{ user.email}}</p>
         <p class="detail_p"> Campus : {{ user.campus.name }}</p>
-        <a class="detail_lien" href="{{ path('main_index') }}">Annuler</a>
+        <a class="form__link" href="{{ path('main_index') }}">Annuler</a>
     </div>
 {% endblock %}
 
