@@ -112,6 +112,10 @@ body {
     gap: 20px;
 }
 
+.header__img {
+    height: 60px;
+}
+
 /* Header > Nav
    ========================================================================== */
 
@@ -465,6 +469,7 @@ body {
 }
 .detail_p{
 margin-top: 15px;
+margin-bottom: 15px;
 }
 .detail_lien{
     margin-top: 45px;
