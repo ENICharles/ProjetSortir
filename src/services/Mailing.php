@@ -56,7 +56,7 @@ class Mailing
      * @return void
      * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function confrimationDesistement(Event $event,User $user)
+    public function confirmationDesistement(Event $event,User $user)
     {
         $email = (new Email())
             ->from('admin@eni.fr')
