@@ -42,7 +42,7 @@ class UserController extends AbstractController
            $pseudo = $userForm['username']->getData();
            $pseudoBdD = $userRepository->findAll();
            foreach ($pseudoBdD as $key => $value){
-               if($value->getUsername() === $pseudo){
+               if(($value->getUsername() === $pseudo) and ($value->getId() != $profil[0]->getId())){
                    $flag = true;
                }
            }

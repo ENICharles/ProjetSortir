@@ -37,7 +37,7 @@ class EventType extends AbstractType
                 'label' => 'Date de limite d\'inscription :',
                 'widget'=> 'single_text',
                 'input_format' => 'd/m/Y H:i:',
-                'data' => (new \DateTime("now"))->modify('+1 month'),
+                'data' => (new \DateTime("now"))->modify('-1 day'),
                 'required'=> true
             ])
 

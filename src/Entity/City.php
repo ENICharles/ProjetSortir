@@ -25,7 +25,6 @@ class City
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups('lieu')]
     #[Assert\NotBlank]
-    #[Assert\Regex("/^(([0-8][0-9])|(9[0-5]))[0-9]{3}$/)")]
     private $postcode;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Localisation::class)]
